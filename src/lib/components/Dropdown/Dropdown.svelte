@@ -20,6 +20,7 @@
 
 	context.subscribe((value) => {
 		isExpanded = value.isExpanded;
+		itemsIndex = value.currentIndex;
 		dispatch('expanded', isExpanded);
 	});
 
