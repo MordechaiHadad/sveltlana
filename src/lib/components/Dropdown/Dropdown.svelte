@@ -4,6 +4,7 @@
 	import type { context } from './context.js';
 	import { createEventDispatcher } from 'svelte';
 	import { clickOutside } from '$lib/functions.js';
+	import { twMerge } from 'tailwind-merge';
 
 	const dispatch = createEventDispatcher();
 
@@ -49,14 +50,14 @@
 		if (!targets.includes(event.key)) return;
 		event.preventDefault();
 
-		let target = self.querySelector('.dropdown-content') as HTMLElement;
+		let target = self.querySelector('#dropdown-content') as HTMLElement;
 
 		if (!target) return;
 
 		const length = target.children.length;
 		itemsIndex = getActiveItemIndex();
 		currentItem = target.children[itemsIndex] as HTMLElement;
-		
+
 		const isArrowUp = event.key === 'ArrowUp';
 		const edgeIndex = isArrowUp ? 0 : length - 1;
 
@@ -85,7 +86,7 @@
 
 	const getActiveItemIndex = () => {
 		const activeItem = self.querySelector('[data-active]');
-		const target = self.querySelector('.dropdown-content') as HTMLElement;
+		const target = self.querySelector('#dropdown-content') as HTMLElement;
 		const items = Array.from(target.children);
 		const index = activeItem ? items.indexOf(activeItem) : -1;
 		return index;
@@ -106,7 +107,7 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div
-	class="dropdown {$$props.class}"
+	class={twMerge('relative inline-block', $$props.class)}
 	role="button"
 	bind:this={self}
 	tabindex="-1"
@@ -121,10 +122,3 @@
 >
 	<slot />
 </div>
-
-<style>
-	.dropdown {
-		position: relative;
-		display: inline-block;
-	}
-</style>

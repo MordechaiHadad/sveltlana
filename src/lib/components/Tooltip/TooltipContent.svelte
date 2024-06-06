@@ -5,6 +5,7 @@
 	import type { Writable } from 'svelte/store';
 	import type { Orientation, Position } from '$lib/types.js';
 	import { getDynamicPosition } from '$lib/functions.js';
+	import { twMerge } from 'tailwind-merge';
 
 	export let position: Position = 'top';
 	export let orientation: Orientation = 'horizontal';
@@ -33,16 +34,16 @@
 </script>
 
 {#if $context.isHovered}
-	<div class="tooltip-content {$$props.class}" transition:transition use:setDynamicPositioning>
+	<div
+		class={twMerge('absolute z-50', $$props.class)}
+		transition:transition
+		use:setDynamicPositioning
+	>
 		<slot />
 	</div>
 {/if}
 
 <style>
-	.tooltip-content {
-		position: absolute;
-		z-index: 50;
-	}
 	.top {
 		bottom: 100%;
 		right: 50%;

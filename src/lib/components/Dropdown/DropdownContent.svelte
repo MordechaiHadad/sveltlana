@@ -5,6 +5,7 @@
 	import { slide } from 'svelte/transition';
 	import { getDynamicPosition } from '$lib/functions.js';
 	import type { Position } from '$lib/types.js';
+	import { twMerge } from 'tailwind-merge';
 
 	let context: Writable<context> = getContext('dropdown');
 	let position: Position = 'bottom';
@@ -19,19 +20,17 @@
 </script>
 
 {#if $context.isExpanded}
-	<div class="dropdown-content {$$props.class}" transition:transition use:setDynamicPositioning>
+	<div
+		id="dropdown-content"
+		class={twMerge('z-50 absolute flex min-w-full flex-col', $$props.class)}
+		transition:transition
+		use:setDynamicPositioning
+	>
 		<slot />
 	</div>
 {/if}
 
 <style>
-	.dropdown-content {
-		z-index: 50;
-		position: absolute;
-		display: flex;
-		min-width: 100%;
-		flex-direction: column;
-	}
 	.top {
 		bottom: 100%;
 	}

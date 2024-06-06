@@ -2,6 +2,7 @@
 	import { getContext, setContext } from 'svelte';
 	import type { context } from './context.js';
 	import { writable, type Writable } from 'svelte/store';
+	import { twMerge } from 'tailwind-merge';
 
 	let context: Writable<context> = writable({
 		isHovered: false
@@ -10,7 +11,7 @@
 	setContext('tooltip', context);
 </script>
 
-<div class="tooltip {$$props.class}" tabindex="-1">
+<div class={twMerge('relative inline-block', $$props.class)} tabindex="-1">
 	<slot />
 </div>
 
