@@ -3,17 +3,17 @@
 	import { getContext } from 'svelte';
 	import type { context } from './context.js';
 	import type { Writable } from 'svelte/store';
-	import type { Orientation, Position } from '$lib/types.js';
+	import type { Orientation, Alignment } from '$lib/types.js';
 	import { getDynamicPosition } from '$lib/functions.js';
 	import { twMerge } from 'tailwind-merge';
 
-	export let position: Position = 'top';
+	export let position: Alignment = 'top';
 	export let orientation: Orientation = 'horizontal';
 
 	let context: Writable<context> = getContext('tooltip');
 	export let transition = fade;
 
-	const simplifyPosition = (position: Position, orientation: Orientation): Position => {
+	const simplifyPosition = (position: Alignment, orientation: Orientation): Alignment => {
 		if (orientation === 'vertical') {
 			if (position === 'top-left' || position === 'top-right') return 'top';
 			else if (position === 'bottom-left' || position === 'bottom-right') return 'bottom';

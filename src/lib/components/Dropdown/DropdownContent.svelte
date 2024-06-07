@@ -4,11 +4,11 @@
 	import type { Writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import { getDynamicPosition } from '$lib/functions.js';
-	import type { Position } from '$lib/types.js';
+	import type { Alignment } from '$lib/types.js';
 	import { twMerge } from 'tailwind-merge';
 
 	let context: Writable<context> = getContext('dropdown');
-	let position: Position = 'bottom';
+	let position: Alignment = 'bottom';
 	export let transition = slide;
 
 	const setDynamicPositioning = (node: HTMLElement) => {

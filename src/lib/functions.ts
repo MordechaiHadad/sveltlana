@@ -1,10 +1,10 @@
-import type { Orientation, Position } from "./types.js";
+import type { Orientation, Alignment } from "./types.js";
 
 export const getDynamicPosition = (
 	node: HTMLElement,
 	orientation: Orientation
-): Position => {
-	let position: Position = 'top';
+): Alignment => {
+	let position: Alignment = 'top';
 
 	const rect = node.getBoundingClientRect();
 	const windowHeight = window.innerHeight;
