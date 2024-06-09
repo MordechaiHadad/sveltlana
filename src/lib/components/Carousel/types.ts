@@ -12,3 +12,5 @@ export type Alignment =
 export type Direction = 'column' | 'row';
 
 export type Orientation = 'horizontal' | 'vertical';
+
+export type SwipingDirection = 'left' | 'right' | 'up' | 'down' | "none";

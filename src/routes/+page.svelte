@@ -14,21 +14,21 @@
 			scroll(isNumberPositive(event.detail.event.deltaY) ? 'prev' : 'next', event.detail.context);
 	}}
 >
-	<CarouselContent direction="column" class="gap-2">
+	<CarouselContent direction="row" class="gap-2">
 		{#each Array.from({ length: 20 }) as _, i}
 			<CarouselItem
 				class="brightness-50 data-[active]:brightness-100 duration-[1.25s] ease-in-out transition-all"
 			>
 				{#if i % 2 === 0}
 					<img
-						class="pointer-events-none border-2 border-red-500 rounded-md w-full"
+						class="pointer-events-none rounded-md w-full"
 						src="https://images.unsplash.com/photo-1717597860306-e6d3602f9913?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						alt="A beautiful landscape"
 					/>
 				{:else}
 					<img
 						src="https://images.unsplash.com/photo-1712688930249-98e1963af7bd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-						class="pointer-events-none border-2 border-blue-500 rounded-md w-full"
+						class="pointer-events-none rounded-md w-full"
 						alt="A beautiful landscape"
 					/>
 				{/if}

@@ -1,4 +1,5 @@
-import type { SwipingDirection } from './types.js';
+import type { SwipingDirection } from "./types.js";
+
 
 export let startX = 0;
 export let startY = 0;

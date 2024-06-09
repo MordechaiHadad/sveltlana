@@ -2,10 +2,10 @@
 	import { createEventDispatcher, setContext } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
 	import type { context } from './context.js';
-	import type { Direction } from '$lib/types.js';
 	import { twMerge } from 'tailwind-merge';
 	import { scroll } from './functions.js';
 	import { detectSwipingDirection, onMouseDown, onMouseMove, onMouseUp, onTouchEnd, onTouchMove, onTouchStart } from './swiping.js';
+	import type { Direction } from './types.js';
 
 	const dispatch = createEventDispatcher();
 
