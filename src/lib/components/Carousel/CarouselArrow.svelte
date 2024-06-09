@@ -14,7 +14,7 @@
 
 <button
 	class={twMerge(
-		`z-50 absolute top-1/2 -translate-y-1/2 ${type === 'prev' ? '-left-12' : '-right-12'}`,
+		`z-50 size-fit`,
 		$$props.class
 	)}
 	data-carousel-arrow

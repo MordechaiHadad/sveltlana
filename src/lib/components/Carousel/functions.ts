@@ -18,14 +18,14 @@ export const scroll = (direction: 'next' | 'prev', context: Writable<context>, i
 	let newSlide = currentSlide;
 	const carouselContent = carousel.querySelector('[data-carousel-content]') as HTMLElement;
 
-	if (index && index >= 0 && length >= index) {
+	if (index !== undefined && isNumberPositive(index) && length > index) {
 		newSlide = index;
 		const child = carouselContent?.children[newSlide] as HTMLElement;
 
-		carouselContent?.scroll({
-			left: child?.offsetLeft,
-			behavior: 'smooth'
-		});
+		setScroll(child, currentItem, carouselContent);
+		currentItem = child;
+
+		updateCurrentSlide(newSlide, currentItem, context);
 		return;
 	}
 
@@ -36,13 +36,7 @@ export const scroll = (direction: 'next' | 'prev', context: Writable<context>, i
 
 		const child = carouselContent?.children[newSlide] as HTMLElement;
 
-		child?.setAttribute('data-active', '');
-		carouselContent?.scroll({
-			left: child?.offsetLeft,
-			behavior: 'smooth'
-		});
-
-		currentItem?.removeAttribute('data-active');
+		setScroll(child, currentItem, carouselContent);
 		currentItem = child;
 	} else {
 		newSlide -= 1;
@@ -51,19 +45,25 @@ export const scroll = (direction: 'next' | 'prev', context: Writable<context>, i
 
 		const child = carouselContent.children[newSlide] as HTMLElement;
 
-		child?.setAttribute('data-active', '');
-		carouselContent?.scroll({
-			left: child?.offsetLeft,
-			behavior: 'smooth'
-		});
-
-		currentItem?.removeAttribute('data-active');
+		setScroll(child, currentItem, carouselContent);
 		currentItem = child;
 	}
+
 	updateCurrentSlide(newSlide, currentItem, context);
 };
 
-export const updateCurrentSlide = (
+const setScroll = (child: HTMLElement, currentItem: HTMLElement, carouselContent: HTMLElement) => {
+	child?.setAttribute('data-active', '');
+	carouselContent?.scroll({
+		left: child?.offsetLeft,
+		behavior: 'smooth'
+	});
+
+	currentItem.removeAttribute('data-active');
+	currentItem = child;
+};
+
+const updateCurrentSlide = (
 	currentSlide: number,
 	currentItem: HTMLElement,
 	context: Writable<context>
