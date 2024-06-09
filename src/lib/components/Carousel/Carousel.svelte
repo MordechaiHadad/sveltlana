@@ -33,8 +33,10 @@
 
 		if (swipeDirection === 'right') dir = 'prev';
 		else if (swipeDirection === 'left') dir = 'next';
+		else if (swipeDirection === 'up') dir = 'next';
+		else if (swipeDirection === 'down') dir = 'prev';
 
-		if (swipeDirection === 'none') return;
+		if (swipeDirection === "none") return;
 
 		scroll(dir, context);
 	};

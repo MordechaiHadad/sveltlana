@@ -1,4 +1,4 @@
-import type { Direction } from "$lib/types.js";
+import type { Direction } from "./types.js";
 
 interface context {
     currentSlide: number;
