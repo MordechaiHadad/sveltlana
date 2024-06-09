@@ -4,13 +4,20 @@
 	import type { context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
 	import { scroll } from './functions.js';
-	import { detectSwipingDirection, onMouseDown, onMouseMove, onMouseUp, onTouchEnd, onTouchMove, onTouchStart } from './swiping.js';
+	import {
+		detectSwipingDirection,
+		onMouseDown,
+		onMouseMove,
+		onMouseUp,
+		onTouchEnd,
+		onTouchMove,
+		onTouchStart
+	} from './swiping.js';
 	import type { Direction } from './types.js';
 
 	const dispatch = createEventDispatcher();
 
 	export let direction: Direction = 'column';
-
 
 	let context: Writable<context> = writable({
 		direction,
@@ -28,7 +35,12 @@
 	};
 
 	const handleSwipe = (event: CustomEvent) => {
-		const swipeDirection = detectSwipingDirection(event.detail.startX, event.detail.startY, event.detail.endX, event.detail.endY);
+		const swipeDirection = detectSwipingDirection(
+			event.detail.startX,
+			event.detail.startY,
+			event.detail.endX,
+			event.detail.endY
+		);
 		let dir: 'prev' | 'next' = 'prev';
 
 		if (swipeDirection === 'right') dir = 'prev';
@@ -36,7 +48,7 @@
 		else if (swipeDirection === 'up') dir = 'next';
 		else if (swipeDirection === 'down') dir = 'prev';
 
-		if (swipeDirection === "none") return;
+		if (swipeDirection === 'none') return;
 
 		scroll(dir, context);
 	};
