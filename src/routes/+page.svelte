@@ -4,7 +4,7 @@
 	import CarouselContent from '$lib/components/Carousel/CarouselContent.svelte';
 	import CarouselIndicator from '$lib/components/Carousel/CarouselIndicator.svelte';
 	import CarouselItem from '$lib/components/Carousel/CarouselItem.svelte';
-	import { isNumberPositive } from '$lib/components/Carousel/functions.js';
+	import { isNumberPositive, scroll } from '$lib/components/Carousel/functions.js';
 </script>
 
 <Carousel
