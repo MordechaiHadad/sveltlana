@@ -1,5 +1,4 @@
-import type { SwipingDirection } from "./types.js";
-
+import type { SwipingDirection } from './types.js';
 
 export let startX = 0;
 export let startY = 0;
@@ -13,7 +12,7 @@ export const onTouchStart = (event: TouchEvent) => {
 };
 
 export const onTouchMove = (event: TouchEvent) => {
-    event.preventDefault();
+	event.preventDefault();
 	endX = event.touches[0].clientX;
 	endY = event.touches[0].clientY;
 };
@@ -38,18 +37,20 @@ export const onMouseMove = (event: MouseEvent) => {
 };
 
 export const onMouseUp = (event: MouseEvent) => {
-	if (isDragging) {
-		isDragging = false;
-		event.currentTarget?.dispatchEvent(
-			new CustomEvent('swipe', { detail: { startX, startY, endX, endY } })
-		);
-		startX = 0;
-		startY = 0;
-		endX = 0;
-		endY = 0;
-	}
+	if (!isDragging) return;
+	isDragging = false;
+	event.currentTarget?.dispatchEvent(
+		new CustomEvent('swipe', { detail: { startX, startY, endX, endY } })
+	);
+	startX = 0;
+	startY = 0;
+	endX = 0;
+	endY = 0;
 };
 
+export const onMouseLeave = (event: MouseEvent) => {
+	onMouseUp(event);
+};
 
 /**
  * Detects the direction of a swipe based on the start and end coordinates.

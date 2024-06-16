@@ -14,7 +14,7 @@
 			scroll(isNumberPositive(event.detail.event.deltaY) ? 'prev' : 'next', event.detail.context);
 	}}
 >
-	<CarouselContent direction="row" class="gap-2">
+	<CarouselContent direction="column" class="gap-2">
 		{#each Array.from({ length: 20 }) as _, i}
 			<CarouselItem
 				class="brightness-50 data-[active]:brightness-100 duration-[1.25s] ease-in-out transition-all"

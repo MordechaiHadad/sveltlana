@@ -11,7 +11,8 @@
 		onMouseUp,
 		onTouchEnd,
 		onTouchMove,
-		onTouchStart
+		onTouchStart,
+		onMouseLeave
 	} from './swiping.js';
 	import type { Direction } from './types.js';
 
@@ -70,6 +71,7 @@
 	on:mouseup={onMouseUp}
 	on:mousedown={onMouseDown}
 	on:mousemove={onMouseMove}
+	on:mouseleave={onMouseLeave}
 	on:swipe={handleSwipe}
 	on:wheel={(event) => {
 		dispatch('scroll', {
