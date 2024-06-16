@@ -41,19 +41,21 @@
 			event.detail.endX,
 			event.detail.endY
 		);
+
+		if (
+			swipeDirection === 'none' ||
+			($context.direction === 'column' &&
+				(swipeDirection === 'left' || swipeDirection === 'right')) ||
+			($context.direction === 'row' && (swipeDirection === 'up' || swipeDirection === 'down'))
+		)
+			return;
+
 		let dir: 'prev' | 'next' = 'prev';
 
 		if (swipeDirection === 'right') dir = 'prev';
 		else if (swipeDirection === 'left') dir = 'next';
 		else if (swipeDirection === 'up') dir = 'next';
 		else if (swipeDirection === 'down') dir = 'prev';
-
-		if (
-			swipeDirection === 'none' ||
-			(direction === 'column' && (swipeDirection === 'left' || swipeDirection === 'right')) ||
-			(direction === 'row' && (swipeDirection === 'up' || swipeDirection === 'down'))
-		)
-			return;
 
 		scroll(dir, context);
 	};
