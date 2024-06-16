@@ -3,7 +3,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import type { context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
-	import { scroll } from './functions.js';
+	import { autoplay, scroll } from './functions.js';
 	import {
 		detectSwipingDirection,
 		onMouseDown,
@@ -19,6 +19,8 @@
 	const dispatch = createEventDispatcher();
 
 	export let direction: Direction = 'column';
+	export let autoplayEnabled = false;
+	export let autoplayInterval = 5000;
 
 	let context: Writable<context> = writable({
 		direction,
@@ -60,10 +62,16 @@
 
 		scroll(dir, context);
 	};
+
+	const handleAutoplay = () => {
+		scroll('next', context);
+	};
 </script>
 
 <div
 	class={twMerge('relative select-none', $$props.class)}
+	use:autoplay={{ enabled: autoplayEnabled, interval: autoplayInterval }}
+	on:autoplay={handleAutoplay}
 	use:updateContext
 	on:touchstart={onTouchStart}
 	on:touchmove={onTouchMove}
