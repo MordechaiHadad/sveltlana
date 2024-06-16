@@ -9,8 +9,6 @@
 
 <Carousel
 	class="test max-w-96 max-h-96 mt-56 flex flex-col gap-5"
-	autoplayEnabled={true}
-	autoplayInterval={2500}
 	on:scroll={(event) => {
 		if (event.detail.event.ctrlKey)
 			scroll(isNumberPositive(event.detail.event.deltaY) ? 'prev' : 'next', event.detail.context);

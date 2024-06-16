@@ -6,6 +6,28 @@ export let endX = 0;
 export let endY = 0;
 export let isDragging = false;
 
+export const swipe = (node: HTMLElement) => {
+	node.addEventListener('touchstart', onTouchStart);
+	node.addEventListener('touchmove', onTouchMove);
+	node.addEventListener('touchend', onTouchEnd);
+	node.addEventListener('mouseup', onMouseUp);
+	node.addEventListener('mousedown', onMouseDown);
+	node.addEventListener('mousemove', onMouseMove);
+	node.addEventListener('mouseleave', onMouseLeave);
+
+	return {
+		destroy() {
+			node.removeEventListener('touchstart', onTouchStart);
+			node.removeEventListener('touchmove', onTouchMove);
+			node.removeEventListener('touchend', onTouchEnd);
+			node.removeEventListener('mouseup', onMouseUp);
+			node.removeEventListener('mousedown', onMouseDown);
+			node.removeEventListener('mousemove', onMouseMove);
+			node.removeEventListener('mouseleave', onMouseLeave);
+		}
+	};
+};
+
 export const onTouchStart = (event: TouchEvent) => {
 	startX = event.touches[0].clientX;
 	startY = event.touches[0].clientY;

@@ -12,7 +12,8 @@
 		onTouchEnd,
 		onTouchMove,
 		onTouchStart,
-		onMouseLeave
+		onMouseLeave,
+		swipe
 	} from './swiping.js';
 	import type { Direction } from './types.js';
 
@@ -73,13 +74,7 @@
 	use:autoplay={{ enabled: autoplayEnabled, interval: autoplayInterval }}
 	on:autoplay={handleAutoplay}
 	use:updateContext
-	on:touchstart={onTouchStart}
-	on:touchmove={onTouchMove}
-	on:touchend={onTouchEnd}
-	on:mouseup={onMouseUp}
-	on:mousedown={onMouseDown}
-	on:mousemove={onMouseMove}
-	on:mouseleave={onMouseLeave}
+	use:swipe
 	on:swipe={handleSwipe}
 	on:wheel={(event) => {
 		dispatch('scroll', {
