@@ -94,10 +94,10 @@ export const detectSwipingDirection = (
 	const deltaX = endX - startX;
 	const deltaY = endY - startY;
 
-	if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 80) {
+	if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 60) {
 		if (deltaX > 0) return 'right';
 		else return 'left';
-	} else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 80) {
+	} else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 60) {
 		if (deltaY > 0) return 'down';
 		else return 'up';
 	}
