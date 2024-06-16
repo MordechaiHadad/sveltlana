@@ -48,14 +48,19 @@
 		else if (swipeDirection === 'up') dir = 'next';
 		else if (swipeDirection === 'down') dir = 'prev';
 
-		if (swipeDirection === 'none') return;
+		if (
+			swipeDirection === 'none' ||
+			(direction === 'column' && (swipeDirection === 'left' || swipeDirection === 'right')) ||
+			(direction === 'row' && (swipeDirection === 'up' || swipeDirection === 'down'))
+		)
+			return;
 
 		scroll(dir, context);
 	};
 </script>
 
 <div
-	class={twMerge('relative', $$props.class)}
+	class={twMerge('relative select-none', $$props.class)}
 	use:updateContext
 	on:touchstart={onTouchStart}
 	on:touchmove={onTouchMove}

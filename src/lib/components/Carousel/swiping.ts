@@ -13,6 +13,7 @@ export const onTouchStart = (event: TouchEvent) => {
 };
 
 export const onTouchMove = (event: TouchEvent) => {
+    event.preventDefault();
 	endX = event.touches[0].clientX;
 	endY = event.touches[0].clientY;
 };
@@ -49,6 +50,16 @@ export const onMouseUp = (event: MouseEvent) => {
 	}
 };
 
+
+/**
+ * Detects the direction of a swipe based on the start and end coordinates.
+ *
+ * @param {number} startX - The starting X coordinate of the swipe.
+ * @param {number} startY - The starting Y coordinate of the swipe.
+ * @param {number} endX - The ending X coordinate of the swipe.
+ * @param {number} endY - The ending Y coordinate of the swipe.
+ * @returns {SwipingDirection} The direction of the swipe. Can be 'none', 'right', 'left', 'down', or 'up'.
+ */
 export const detectSwipingDirection = (
 	startX: number,
 	startY: number,
@@ -60,10 +71,10 @@ export const detectSwipingDirection = (
 	const deltaX = endX - startX;
 	const deltaY = endY - startY;
 
-	if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 60) {
+	if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 80) {
 		if (deltaX > 0) return 'right';
 		else return 'left';
-	} else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 60) {
+	} else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 80) {
 		if (deltaY > 0) return 'down';
 		else return 'up';
 	}
