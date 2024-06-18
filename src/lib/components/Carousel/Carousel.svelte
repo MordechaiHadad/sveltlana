@@ -4,17 +4,7 @@
 	import type { context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
 	import { autoplay, scroll } from './functions.js';
-	import {
-		detectSwipingDirection,
-		onMouseDown,
-		onMouseMove,
-		onMouseUp,
-		onTouchEnd,
-		onTouchMove,
-		onTouchStart,
-		onMouseLeave,
-		swipe
-	} from './swiping.js';
+	import { detectSwipingDirection, swipe } from './swiping.js';
 	import type { Direction } from './types.js';
 
 	const dispatch = createEventDispatcher();
