@@ -9,4 +9,4 @@
 	};
 </script>
 
-<button on:click={toggle}><slot /></button>
+<button class={$$props.class} on:click={toggle}><slot /></button>
