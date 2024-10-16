@@ -12,6 +12,7 @@
 	export let direction: Direction = 'column';
 	export let autoplayEnabled = false;
 	export let autoplayInterval = 5000;
+	export let currentSlide = 0;
 
 	let context: Writable<context> = writable({
 		direction,
@@ -20,6 +21,8 @@
 	});
 
 	setContext('carousel', context);
+
+	$: currentSlide = $context.currentSlide;
 
 	const updateContext = (node: HTMLElement) => {
 		context.update((ctx) => ({
