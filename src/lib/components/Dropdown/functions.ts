@@ -1,8 +1,8 @@
-import type { Writable } from 'svelte/store';
-import type { context } from './context.js';
+import type { IContext } from './context.js';
 
-export const toggle = (context: Writable<context>) => {
-	context.update((value) => ({ currentIndex: -1, isExpanded: !value.isExpanded }));
+export const toggle = (context: IContext) => {
+	context.currentIndex = -1;
+	context.isExpanded = !context.isExpanded;
 };
 
 export const debounce = (fn: Function, delay: number, debounce: { isDebouncing: boolean }) => {

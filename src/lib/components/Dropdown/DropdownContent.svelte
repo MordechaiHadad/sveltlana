@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { context } from './context.js';
-	import type { Writable } from 'svelte/store';
+	import type { IContext } from './context.js';
 	import { slide } from 'svelte/transition';
 	import { getDynamicPosition } from '$lib/functions.js';
 	import type { Alignment } from '$lib/types.js';
 	import { twMerge } from 'tailwind-merge';
 
-	let context: Writable<context> = getContext('dropdown');
+	let context: IContext = getContext('dropdown');
 	let position: Alignment = 'bottom';
 	export let transition = slide;
 
@@ -19,7 +18,7 @@
 	};
 </script>
 
-{#if $context.isExpanded}
+{#if context.isExpanded}
 	<div
 		id="dropdown-content"
 		class={twMerge('z-50 absolute flex min-w-full flex-col', $$props.class)}

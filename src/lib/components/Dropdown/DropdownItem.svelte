@@ -1,18 +1,20 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { getContext } from 'svelte';
-	import type { context } from './context.js';
-	import type { Writable } from 'svelte/store';
+	import type { IContext } from './context.js';
 	import { toggle } from './functions.js';
 
-	export let autoCloseOnClick = true;
+	type Props = {
+		autoCloseOnClick?: boolean;
+		class?: string;
+		select: (context: IContext) => void;
+	};
 
-	let context: Writable<context> = getContext('dropdown');
+	let { autoCloseOnClick = true, class: className = '', select }: Props = $props();
 
-	const dispatch = createEventDispatcher();
+	let context: IContext = getContext('dropdown');
 
 	const handleClick = () => {
-		dispatch('select', { context: context });
+		select(context);
 		if (autoCloseOnClick) toggle(context);
 	};
 
@@ -27,12 +29,12 @@
 	};
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <button
-	class={$$props.class}
-	on:click={handleClick}
-	on:mouseover={onHover}
-	on:mouseout={onHoverOut}
+	class={className}
+	onclick={handleClick}
+	onmouseover={onHover}
+	onmouseout={onHoverOut}
 	tabindex="-1"
 >
 	<slot />

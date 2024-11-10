@@ -1,12 +1,14 @@
 <script lang="ts">
-	import type { Writable } from 'svelte/store';
-	import type { context } from './context.js';
+	import type { IContext } from './context.js';
 	import { getContext } from 'svelte';
-	let context: Writable<context> = getContext('popover');
+
+	let { class: className = '' } = $props();
+
+	let context: IContext = getContext('popover');
 
 	const toggle = () => {
-		context.update((value) => ({ isExpanded: !value.isExpanded }));
+		context.isExpanded = !context.isExpanded
 	};
 </script>
 
-<button class={$$props.class} on:click={toggle}><slot /></button>
+<button class={className} onclick={toggle}><slot /></button>

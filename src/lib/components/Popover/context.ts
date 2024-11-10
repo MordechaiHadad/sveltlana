@@ -1,5 +1,3 @@
-interface context {
+export interface IContext {
     isExpanded: boolean;
 }
-
-export type { context }

@@ -1,11 +1,9 @@
 import type { Direction } from "./types.js";
 
-interface context {
+export interface IContext {
     currentSlide: number;
     direction: Direction;
     length: number;
     carousel?: HTMLElement;
     currentItem?: HTMLElement;
 }
-
-export type { context };

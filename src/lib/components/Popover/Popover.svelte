@@ -1,28 +1,29 @@
 <script lang="ts">
-	import { writable, type Writable } from 'svelte/store';
-	import type { context } from './context.js';
+	import type { IContext } from './context.js';
 	import { twMerge } from 'tailwind-merge';
 	import { setContext } from 'svelte';
-	import { clickOutside } from '$lib/functions.js';
+	import { clickOutside } from '$lib/actions/clickOutside.js';
 
-	export let closeOnOutsideClick = true;
+	let { closeOnOutsideClick = true, class: className = '' } = $props();
 
-	let context: Writable<context> = writable({
+	let context: IContext = $state({
 		isExpanded: false
 	});
 
 	setContext('popover', context);
 
 	const close = () => {
-		context.update((value) => ({ isExpanded: false }));
+		context.isExpanded = false;
 	};
 </script>
 
 <div
-	class={twMerge('relative inline-block', $$props.class)}
+	class={twMerge('relative inline-block', className)}
 	tabindex="-1"
-	use:clickOutside={() => {
-		if (closeOnOutsideClick) close();
+	use:clickOutside={{
+		callback: () => {
+			if (closeOnOutsideClick) close();
+		}
 	}}
 >
 	<slot />

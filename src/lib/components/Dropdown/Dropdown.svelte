@@ -1,36 +1,31 @@
 <script lang="ts">
-	import { writable, type Writable } from 'svelte/store';
 	import { setContext } from 'svelte';
-	import type { context } from './context.js';
-	import { createEventDispatcher } from 'svelte';
-	import { clickOutside } from '$lib/functions.js';
+	import type { IContext } from './context.js';
 	import { twMerge } from 'tailwind-merge';
+	import { clickOutside } from '$lib/actions/clickOutside.js';
 
-	const dispatch = createEventDispatcher();
+	type Props = {
+		closeOnOutsideClick?: boolean;
+		class?: string;
+		expanded: (isExpanded: boolean) => void;
+	}
 
-	let isExpanded = false;
+	let { closeOnOutsideClick = true, class: className = '', expanded }: Props = $props();
+
+	let context: IContext = $state({
+		isExpanded: false,
+		currentIndex: -1
+	});
+
+	$effect(() => {
+		expanded(context.isExpanded);
+	});
 	let self: HTMLElement;
 	let currentItem: HTMLElement;
-	let itemsIndex = -1;
-	export let closeOnOutsideClick = true;
-
-	let context: Writable<context> = writable({
-		isExpanded: isExpanded,
-		currentIndex: itemsIndex
-	});
-
-	context.subscribe((value) => {
-		isExpanded = value.isExpanded;
-		itemsIndex = value.currentIndex;
-		dispatch('expanded', isExpanded);
-	});
 
 	const close = () => {
-		context.update((value) => {
-			value.isExpanded = false;
-			value.currentIndex = -1;
-			return value;
-		});
+		context.isExpanded = false;
+		context.currentIndex = -1;
 	};
 
 	setContext('dropdown', context);
@@ -40,7 +35,7 @@
 		navigateDropdownItems(event);
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
-			if ($context.isExpanded && itemsIndex > -1) currentItem.click();
+			if (context.isExpanded && context.currentIndex > -1) currentItem.click();
 		}
 	};
 
@@ -49,6 +44,7 @@
 		const targets = ['ArrowUp', 'ArrowDown'];
 		if (!targets.includes(event.key)) return;
 		event.preventDefault();
+		let itemsIndex = context.currentIndex;
 
 		let target = self.querySelector('#dropdown-content') as HTMLElement;
 
@@ -78,10 +74,7 @@
 		itemsIndex = activeItemIndex;
 		setInactiveItem(currentItem);
 		currentItem = activeItemElement;
-		context.update((value) => {
-			value.currentIndex = itemsIndex;
-			return value;
-		});
+		context.currentIndex = itemsIndex;
 	};
 
 	const getActiveItemIndex = () => {
@@ -105,18 +98,20 @@
 	};
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 <div
-	class={twMerge('relative inline-block', $$props.class)}
+	class={twMerge('relative inline-block', className)}
 	role="button"
 	bind:this={self}
 	tabindex="-1"
-	use:clickOutside={() => {
-		if (closeOnOutsideClick) close();
+	use:clickOutside={{
+		callback: () => {
+			if (closeOnOutsideClick) close();
+		}
 	}}
-	on:keydown={handleKeys}
-	on:mouseover={() => {
-		itemsIndex = -1;
+	onkeydown={handleKeys}
+	onmouseover={() => {
+		context.currentIndex = -1;
 		currentItem && currentItem.removeAttribute('data-active');
 	}}
 >

@@ -2,15 +2,14 @@
 	import { getDynamicPosition } from '$lib/functions.js';
 	import type { Alignment } from '$lib/types.js';
 	import { getContext } from 'svelte';
-	import type { Writable } from 'svelte/store';
 	import { twMerge } from 'tailwind-merge';
-	import type { context } from './context.js';
+	import type { IContext } from './context.js';
 	import { slide } from 'svelte/transition';
 
-	export let transition = slide;
+	let {transition = slide, class: className = "" } = $props();
 
 	let position: Alignment = 'bottom';
-	let context: Writable<context> = getContext('popover');
+	let context: IContext = getContext('popover');
 
 	const setDynamicPositioning = (node: HTMLElement) => {
 		position = getDynamicPosition(node, 'vertical');
@@ -20,9 +19,9 @@
 	};
 </script>
 
-{#if $context.isExpanded}
+{#if context.isExpanded}
 	<div
-		class={twMerge('absolute z-50', $$props.class)}
+		class={twMerge('absolute z-50', className)}
 		use:setDynamicPositioning
 		transition:transition
 	>

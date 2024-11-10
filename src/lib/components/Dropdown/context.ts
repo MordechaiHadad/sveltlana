@@ -1,6 +1,4 @@
-interface context {
+export interface IContext {
     isExpanded: boolean;
     currentIndex: number;
 }
-
-export type { context }

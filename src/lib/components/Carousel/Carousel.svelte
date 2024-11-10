@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher, setContext } from 'svelte';
-	import { writable, type Writable } from 'svelte/store';
-	import type { context } from './context.js';
+	import type { IContext } from './context.js';
 	import { twMerge } from 'tailwind-merge';
 	import { autoplay, scroll } from './functions.js';
 	import { detectSwipingDirection, swipe } from './swiping.js';
@@ -14,7 +13,7 @@
 	export let autoplayInterval = 5000;
 	export let currentSlide = 0;
 
-	let context: Writable<context> = writable({
+	let context: IContext = $state({
 		direction,
 		currentSlide: 0,
 		length: 0
@@ -22,14 +21,9 @@
 
 	setContext('carousel', context);
 
-	$: currentSlide = $context.currentSlide;
+	currentSlide = $derived(context.currentSlide);
 
-	const updateContext = (node: HTMLElement) => {
-		context.update((ctx) => ({
-			...ctx,
-			carousel: node
-		}));
-	};
+	const updateContext = (node: HTMLElement) => context.carousel = node;
 
 	const handleSwipe = (event: CustomEvent) => {
 		const swipeDirection = detectSwipingDirection(
@@ -41,9 +35,9 @@
 
 		if (
 			swipeDirection === 'none' ||
-			($context.direction === 'column' &&
+			(context.direction === 'column' &&
 				(swipeDirection === 'left' || swipeDirection === 'right')) ||
-			($context.direction === 'row' && (swipeDirection === 'up' || swipeDirection === 'down'))
+			(context.direction === 'row' && (swipeDirection === 'up' || swipeDirection === 'down'))
 		)
 			return;
 

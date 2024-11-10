@@ -1,30 +1,19 @@
 <script lang="ts">
-	import { writable, type Writable } from 'svelte/store';
-	import { onDestroy, setContext } from 'svelte';
-	import type { context } from './context.ts';
+	import { setContext } from 'svelte';
+	import type { IContext } from './context.ts';
 	import { twMerge } from 'tailwind-merge';
 
-	let context: Writable<context> = writable({
+	let { class: className = '' } = $props();
+
+	let context: IContext = $state({
 		isExpanded: false
 	});
 
 	setContext('accordion', context);
 
-	const toggle = () => {
-		context.update((value) => ({ isExpanded: !value.isExpanded }));
-	};
-
-	let isExpanded = false;
-
-	const unsubscribe = context.subscribe((value) => {
-		isExpanded = value.isExpanded;
-	});
-
-	onDestroy(() => {
-		unsubscribe();
-	});
+	const toggle = () => context.isExpanded = !context.isExpanded;
 </script>
 
-<button on:click={toggle} class={twMerge('flex flex-col', $$props.class)}>
-	<slot {isExpanded} />
+<button onclick={toggle} class={twMerge('flex flex-col', className)}>
+	<slot isExpanded={context.isExpanded} />
 </button>
