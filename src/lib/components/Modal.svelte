@@ -35,7 +35,7 @@
 {#if isOpen}
 	<div
 		class={twMerge(
-			'fixed z-50 flex size-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-sm',
+			'fixed z-50 flex size-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-xs',
 			styles.container
 		)}
 	>
