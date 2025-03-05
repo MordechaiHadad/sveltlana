@@ -1,0 +1,26 @@
+<script lang="ts">
+    import { getContext } from 'svelte';
+    import { twMerge } from 'tailwind-merge';
+    import type { SwipableContext } from './context.js';
+
+    type Props = {
+        class?: string;
+        children?: any;
+    }
+
+    let { class: className = '', children }: Props = $props();
+    
+    const context: SwipableContext = getContext('swipable');
+    
+    let transform = $derived(`translateX(${context.swipeDistance}px)`);
+</script>
+
+<div 
+    class={twMerge(
+        'w-full transition-transform duration-100 ease-out relative z-10 bg-white',
+        className
+    )}
+    style:transform={transform}
+>
+    {@render children()}
+</div>
