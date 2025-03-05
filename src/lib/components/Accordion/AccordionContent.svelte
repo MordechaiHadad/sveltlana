@@ -1,14 +1,20 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
+	import { getContext, type Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import type { IContext } from './context.js';
+	import type { Context } from './context.js';
 
-	let context: IContext = getContext('accordion');
-	export let transition = slide;
+	type Props = {
+		children: Snippet;
+		transition?: (node: Element, params: any) => any;
+		class?: string;
+	};
+	let { children, transition = slide, class: className = '' }: Props = $props();
+
+	let context: Context = getContext('accordion');
 </script>
 
 {#if context.isExpanded}
-	<div transition:transition>
-		<slot />
+	<div transition:transition={{}} class={className}>
+		{@render children()}
 	</div>
 {/if}

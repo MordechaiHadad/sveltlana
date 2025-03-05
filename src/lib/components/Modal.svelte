@@ -1,18 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
 	import { browser } from '$app/environment';
 
-	export let isOpen = false;
-	export let styles: { container?: string; content?: string } = {};
+	type Props = {
+		children: Snippet;
+		isOpen?: boolean;
+		styles?: { container?: string; content?: string };
+	};
+	let { children, isOpen = false, styles = {} }: Props = $props();
 
-	$: if (browser) {
-		if (isOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = 'auto';
+	$effect(() => {
+		if (browser) {
+			if (isOpen) document.body.style.overflow = 'hidden';
+			else document.body.style.overflow = 'auto';
 		}
-	}
+	});
 
 	onMount(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -34,11 +37,16 @@
 		class={twMerge(
 			'fixed z-50 flex size-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-sm',
 			styles.container
-		)}>
-
+		)}
+	>
 		<!-- Modal Content -->
-		<div class={twMerge("z-50 flex w-full place-content-center px-2 lg:px-20 xl:px-40", styles.content)}>
-			<slot />
+		<div
+			class={twMerge(
+				'z-50 flex w-full place-content-center',
+				styles.content
+			)}
+		>
+			{@render children()}
 		</div>
 	</div>
 {/if}
