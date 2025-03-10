@@ -17,7 +17,7 @@
 
 <div 
     class={twMerge(
-        'w-full transition-transform duration-100 ease-out relative z-10 bg-white',
+        'w-full transition-transform duration-100 ease-out relative z-10',
         className
     )}
     style:transform={transform}
