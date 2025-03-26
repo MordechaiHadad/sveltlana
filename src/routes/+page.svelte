@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import Swipable from "$lib/components/Swipable/Swipable.svelte";
     import SwipableAction from "$lib/components/Swipable/SwipableAction.svelte";
     import SwipableContent from "$lib/components/Swipable/SwipableContent.svelte";
@@ -32,4 +32,24 @@
     >
         <span>Delete</span>
     </SwipableAction>
-</Swipable>
+</Swipable> -->
+
+<script>
+	import ImageModal from '$lib/components/ImageModal.svelte';
+
+	let isModalOpen = false;
+	const imageSrc =
+		'https://media.istockphoto.com/id/516318760/photo/red-fox-vulpes-vulpes.jpg?s=612x612&w=0&k=20&c=jelfBarPxOUUjhiRWDtXlDMAUJJqUih3nnTo7HI4zx8=';
+
+	function openModal() {
+		isModalOpen = true;
+	}
+
+	function closeModal() {
+		isModalOpen = false;
+	}
+</script>
+
+<button onclick={openModal}>Open Image</button>
+
+<ImageModal src={imageSrc} alt="Image description" isOpen={isModalOpen} onClose={closeModal} />
