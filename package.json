@@ -17,6 +17,26 @@
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
+    },
+    "./Accordion": {
+      "types": "./dist/components/Accordion/index.d.ts",
+      "svelte": "./dist/components/Accordion/index.js"
+    },
+    "./Carousel": {
+      "types": "./dist/components/Carousel/index.d.ts",
+      "svelte": "./dist/components/Carousel/index.js"
+    },
+    "./Dropdown": {
+      "types": "./dist/components/Dropdown/index.d.ts",
+      "svelte": "./dist/components/Dropdown/index.js"
+    },
+    "./Popover": {
+      "types": "./dist/components/Popover/index.d.ts",
+      "svelte": "./dist/components/Popover/index.js"
+    },
+    "./Swipable": {
+      "types": "./dist/components/Swipable/index.d.ts",
+      "svelte": "./dist/components/Swipable/index.js"
     }
   },
   "files": [

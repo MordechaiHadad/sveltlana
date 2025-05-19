@@ -5,7 +5,7 @@ export const intersectionObserver = (
         threshold,
         delay
     }: {
-        callback: Function;
+        callback: (entries: IntersectionObserverEntry[]) => void;
         threshold?: number;
         delay?:
             | number
