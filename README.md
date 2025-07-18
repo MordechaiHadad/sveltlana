@@ -27,6 +27,11 @@ npx sveltlana rm Modal
 npx sveltlana rm Accordion Carousel
 ```
 
+> **Note**: Some components require `tailwind-merge` for styling utilities. Install it if needed:
+> ```bash
+> npm install tailwind-merge
+> ```
+
 ### Install as package
 
 ```bash

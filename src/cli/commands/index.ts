@@ -131,6 +131,13 @@ export async function downloadComponent(componentName: string, options: Download
       await copyDependencies(componentName, options.output);
     }
     
+    // Check if component requires tailwind-merge by scanning files
+    const requiresTailwindMerge = await checkComponentForTailwindMerge(sourcePath);
+    if (requiresTailwindMerge) {
+      console.log(`\n📦 Required dependency:`);
+      console.log(`npm install tailwind-merge`);
+    }
+    
     // Show usage instructions
     if (componentType === 'standalone component') {
       console.log(`\n📚 Usage example:`);
@@ -236,5 +243,34 @@ async function copyDependencies(componentName: string, outputDir: string): Promi
     
   } catch (error) {
     console.warn(`⚠️ Warning: Could not copy all dependencies:`, error);
+  }
+}
+
+async function checkComponentForTailwindMerge(sourcePath: string): Promise<boolean> {
+  try {
+    const stat = await fs.stat(sourcePath);
+    
+    if (stat.isFile()) {
+      // Single file - check if it contains tailwind-merge
+      const content = await fs.readFile(sourcePath, 'utf-8');
+      return content.includes('tailwind-merge') || content.includes('twMerge');
+    } else if (stat.isDirectory()) {
+      // Directory - check all .svelte files
+      const files = await fs.readdir(sourcePath);
+      for (const file of files) {
+        if (file.endsWith('.svelte')) {
+          const filePath = path.join(sourcePath, file);
+          const content = await fs.readFile(filePath, 'utf-8');
+          if (content.includes('tailwind-merge') || content.includes('twMerge')) {
+            return true;
+          }
+        }
+      }
+    }
+    
+    return false;
+  } catch {
+    // If we can't read the file, assume no dependency needed
+    return false;
   }
 }
