@@ -2,7 +2,7 @@
 
 ✨ **Beautiful headless Svelte components** - Build stunning UIs with unstyled, accessible components.
 
-Sveltlana provides a collection of headless Svelte components that offer maximum flexibility while maintaining excellent accessibility and developer experience. Style them however you want, they work seamlessly with any CSS framework.
+Sveltlana provides a collection of headless Svelte components built primarily with Tailwind CSS classes and tailwind-merge for styling utilities, offering maximum flexibility while maintaining excellent accessibility and developer experience. Style them using Tailwind CSS utility classes and merge functions for full control.
 
 ## 🚀 Quick Start
 
