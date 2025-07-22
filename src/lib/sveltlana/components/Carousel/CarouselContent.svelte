@@ -1,3 +1,5 @@
+<!-- DEPRECATED: This component is deprecated and should not be used. -->
+
 <script lang="ts">
 	import { getContext, setContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';

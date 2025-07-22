@@ -1,9 +1,15 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import type { IContext } from './context.js';
-	import { debounce, toggle } from './functions.js';
+	import { getContext, Snippet } from 'svelte';
+	import type { IContext } from './context';
+	import { debounce, toggle } from './functions';
 
-	let { class: className = '' } = $props();
+	let {
+		class: className = '',
+		children
+	}: {
+		class?: string;
+		children?: Snippet;
+	} = $props();
 
 	let context: IContext = getContext('dropdown');
 	let debounceState = { isDebouncing: false };
@@ -22,5 +28,5 @@
 </script>
 
 <button onclick={handleClick} class={className} onkeydown={handleEnter}>
-	<slot />
+	{@render children()}
 </button>

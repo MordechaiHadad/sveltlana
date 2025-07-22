@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { SwipableContext } from './context.js';
+	import type { SwipableContext } from './context';
 
 	type Props = {
 		class?: string;
@@ -134,6 +134,7 @@
 		isThresholdReached ? thresholdReachedClass : ''
 	)}
 	bind:this={container}
+	role="presentation"
 	ontouchstart={handleTouchStart}
 	ontouchmove={handleTouchMove}
 	ontouchend={handleTouchEnd}

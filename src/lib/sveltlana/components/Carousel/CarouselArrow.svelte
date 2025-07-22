@@ -1,8 +1,10 @@
+<!-- DEPRECATED: This component is deprecated and should not be used. -->
+
 <script lang="ts">
 	import type { Writable } from 'svelte/store';
 	import { scroll } from './functions.js';
 	import { createEventDispatcher, getContext } from 'svelte';
-	import type { context } from './context.js';
+	import type { IContext } from './context';
 	import { twMerge } from 'tailwind-merge';
 
 	const dispatch = createEventDispatcher();

@@ -1,3 +1,5 @@
+<!-- DEPRECATED: This component is deprecated and should not be used. -->
+
 <script lang="ts">
 	import { createEventDispatcher, getContext, onMount } from 'svelte';
 	import type { Writable } from 'svelte/store';

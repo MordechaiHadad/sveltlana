@@ -1,14 +1,19 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import type { IContext } from './context.js';
+	import { getContext, Snippet } from 'svelte';
+	import type { IContext } from './context';
 	import { slide } from 'svelte/transition';
-	import { getDynamicPosition } from '$lib/functions.js';
-	import type { Alignment } from '$lib/types.js';
 	import { twMerge } from 'tailwind-merge';
+	import type { Alignment } from '../../types';
+	import { getDynamicPosition } from '../../functions';
+
+	let {
+		class: className = '',
+		children,
+		transition = slide
+	}: { class?: string; children: Snippet; transition?: typeof slide } = $props();
 
 	let context: IContext = getContext('dropdown');
 	let position: Alignment = 'bottom';
-	export let transition = slide;
 
 	const setDynamicPositioning = (node: HTMLElement) => {
 		position = getDynamicPosition(node, 'vertical');
@@ -21,11 +26,11 @@
 {#if context.isExpanded}
 	<div
 		id="dropdown-content"
-		class={twMerge('z-50 absolute flex min-w-full flex-col', $$props.class)}
+		class={twMerge('z-50 absolute flex min-w-full flex-col', className)}
 		transition:transition
 		use:setDynamicPositioning
 	>
-		<slot />
+		{@render children()}
 	</div>
 {/if}
 

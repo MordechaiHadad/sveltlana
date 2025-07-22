@@ -1,16 +1,17 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
-	import type { IContext } from './context.js';
+	import { setContext, Snippet } from 'svelte';
+	import type { IContext } from './context';
 	import { twMerge } from 'tailwind-merge';
-	import { clickOutside } from '$lib/actions/clickOutside.js';
+	import { clickOutside } from '../../actions/clickOutside';
 
 	type Props = {
 		closeOnOutsideClick?: boolean;
 		class?: string;
 		expanded: (isExpanded: boolean) => void;
-	}
+		children: Snippet;
+	};
 
-	let { closeOnOutsideClick = true, class: className = '', expanded }: Props = $props();
+	let { closeOnOutsideClick = true, class: className = '', expanded, children }: Props = $props();
 
 	let context: IContext = $state({
 		isExpanded: false,
@@ -115,5 +116,5 @@
 		currentItem && currentItem.removeAttribute('data-active');
 	}}
 >
-	<slot />
+	{@render children()}
 </div>

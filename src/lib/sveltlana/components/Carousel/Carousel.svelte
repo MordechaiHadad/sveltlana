@@ -1,17 +1,32 @@
+<!-- DEPRECATED: This component is deprecated and should not be used. -->
+
 <script lang="ts">
-	import { createEventDispatcher, setContext } from 'svelte';
-	import type { IContext } from './context.js';
+	import { createEventDispatcher, setContext, Snippet } from 'svelte';
+	import type { IContext } from './context';
 	import { twMerge } from 'tailwind-merge';
-	import { autoplay, scroll } from './functions.js';
-	import { detectSwipingDirection, swipe } from './swiping.js';
-	import type { Direction } from './types.js';
+	import { autoplay, scroll } from './functions';
+	import { detectSwipingDirection, swipe } from './swiping';
+	import type { Direction } from './types';
 
-	const dispatch = createEventDispatcher();
+	type Props = {
+		direction?: Direction;
+		autoplayEnabled?: boolean;
+		autoplayInterval?: number;
+		currentSlide?: number;
+		class?: string;
+		onscroll?: (event: { event: WheelEvent; context: IContext }) => void;
+		children?: Snippet;
+	};
 
-	export let direction: Direction = 'column';
-	export let autoplayEnabled = false;
-	export let autoplayInterval = 5000;
-	export let currentSlide = 0;
+	let {
+		direction = 'column',
+		autoplayEnabled = false,
+		autoplayInterval = 5000,
+		currentSlide = $bindable(0),
+		onscroll,
+		class: className = '',
+		children
+	}: Props = $props();
 
 	let context: IContext = $state({
 		direction,
@@ -21,9 +36,14 @@
 
 	setContext('carousel', context);
 
-	currentSlide = $derived(context.currentSlide);
+	$effect(() => {
+		currentSlide = context.currentSlide;
+	});
 
-	const updateContext = (node: HTMLElement) => context.carousel = node;
+	const updateContext = (node: HTMLElement) => {
+		context.carousel = node;
+		return;
+	};
 
 	const handleSwipe = (event: CustomEvent) => {
 		const swipeDirection = detectSwipingDirection(
@@ -57,18 +77,13 @@
 </script>
 
 <div
-	class={twMerge('relative select-none', $$props.class)}
+	class={twMerge('relative select-none', className)}
 	use:autoplay={{ enabled: autoplayEnabled, interval: autoplayInterval }}
-	on:autoplay={handleAutoplay}
 	use:updateContext
 	use:swipe
-	on:swipe={handleSwipe}
-	on:wheel={(event) => {
-		dispatch('scroll', {
-			event,
-			context
-		});
+	onwheel={(event) => {
+		onscroll({ event, context });
 	}}
 >
-	<slot />
+	{@render children()}
 </div>

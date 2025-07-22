@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getContext } from 'svelte';
     import { twMerge } from 'tailwind-merge';
-    import type { SwipableContext } from './context.js';
+    import type { SwipableContext } from './context';
 
     type Props = {
         class?: string;

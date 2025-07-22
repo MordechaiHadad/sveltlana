@@ -1,15 +1,16 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import type { IContext } from './context.js';
-	import { toggle } from './functions.js';
+	import { getContext, Snippet } from 'svelte';
+	import type { IContext } from './context';
+	import { toggle } from './functions';
 
 	type Props = {
 		autoCloseOnClick?: boolean;
 		class?: string;
 		select: (context: IContext) => void;
+		children?: Snippet;
 	};
 
-	let { autoCloseOnClick = true, class: className = '', select }: Props = $props();
+	let { autoCloseOnClick = true, class: className = '', select, children }: Props = $props();
 
 	let context: IContext = getContext('dropdown');
 
@@ -37,5 +38,5 @@
 	onmouseout={onHoverOut}
 	tabindex="-1"
 >
-	<slot />
+	{@render children()}
 </button>

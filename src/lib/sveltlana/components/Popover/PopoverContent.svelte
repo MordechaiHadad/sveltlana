@@ -1,12 +1,20 @@
 <script lang="ts">
-	import { getDynamicPosition } from '$lib/functions.js';
-	import type { Alignment } from '$lib/types.js';
-	import { getContext } from 'svelte';
+	import { getDynamicPosition } from '../../functions';
+	import type { Alignment } from '../../types';
+	import { getContext, Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { IContext } from './context.js';
+	import type { IContext } from './context';
 	import { slide } from 'svelte/transition';
 
-	let {transition = slide, class: className = "" } = $props();
+	let {
+		transition = slide,
+		class: className = '',
+		children
+	}: {
+		transition?: typeof slide;
+		class?: string;
+		children?: Snippet;
+	} = $props();
 
 	let position: Alignment = 'bottom';
 	let context: IContext = getContext('popover');
@@ -20,12 +28,8 @@
 </script>
 
 {#if context.isExpanded}
-	<div
-		class={twMerge('absolute z-50', className)}
-		use:setDynamicPositioning
-		transition:transition
-	>
-		<slot />
+	<div class={twMerge('absolute z-50', className)} use:setDynamicPositioning transition:transition>
+		{@render children()}
 	</div>
 {/if}
 
