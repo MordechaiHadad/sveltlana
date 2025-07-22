@@ -13,11 +13,11 @@
   },
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && npm run package",
+    "build": "vite build && bun run package",
     "build:cli": "tsc --project src/cli/tsconfig.json",
     "preview": "vite preview",
     "package": "svelte-kit sync && svelte-package && publint",
-    "prepublishOnly": "npm run package && npm run build:cli",
+    "prepublishOnly": "bun run package && bun run build:cli",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest",
