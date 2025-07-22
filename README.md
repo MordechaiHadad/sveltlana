@@ -47,6 +47,7 @@ npm install sveltlana
 - **🧩 ImageModal** - Zoomable image viewer with gestures
 - **📦 Popover** - Floating content containers
 - **📦 Swipable** - Touch-friendly swipe interactions
+- **📦 Navbar** - Sticky navigation bar
 - **⚡ Actions** - Utility actions (clickOutside, intersectionObserver, resizeObserver)
 
 ## 🎯 Usage Examples
