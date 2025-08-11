@@ -24,8 +24,8 @@ export interface DownloadOptions {
 
 export async function listComponents(): Promise<void> {
   try {
-    const componentsPath = path.join(__dirname, '../../src/lib/components');
-    const libPath = path.join(__dirname, '../../src/lib');
+    const componentsPath = path.join(__dirname, '../../src/lib/sveltlana/components');
+    const libPath = path.join(__dirname, '../../src/lib/sveltlana');
     const items = await fs.readdir(componentsPath);
     
     console.log('🎨 Available Sveltlana Components:\n');
@@ -82,8 +82,8 @@ export async function downloadComponent(componentName: string, options: Download
   try {
     console.log(`📥 Adding component: ${componentName}`);
     
-    const componentsPath = path.join(__dirname, '../../src/lib/components');
-    const libPath = path.join(__dirname, '../../src/lib');
+    const componentsPath = path.join(__dirname, '../../src/lib/sveltlana/components');
+    const libPath = path.join(__dirname, '../../src/lib/sveltlana');
     
     // Check for folder-based component
     const folderPath = path.join(componentsPath, componentName);
@@ -218,29 +218,61 @@ async function removeComponent(componentName: string, options: DownloadOptions):
 async function copyDependencies(componentName: string, outputDir: string): Promise<void> {
   try {
     console.log(`📦 Copying dependencies for ${componentName}...`);
-    
-    const libPath = path.join(__dirname, '../../src/lib');
-    const sharedFiles = ['types.ts', 'functions.ts'];
-    
-    // Copy shared library files
-    for (const file of sharedFiles) {
-      const sourcePath = path.join(libPath, file);
-      const targetPath = path.join(process.cwd(), outputDir, '..', file);
-      
-      if (await fs.pathExists(sourcePath)) {
-        await fs.copy(sourcePath, targetPath);
-        console.log(`  📄 Copied: ${file}`);
+    const libPath = path.join(__dirname, '../../src/lib/sveltlana');
+    const componentPath = path.join(__dirname, '../../src/lib/sveltlana/components', componentName);
+    let filesToCheck: string[] = [];
+    // Gather all .ts and .svelte files in the component folder
+    if (await fs.pathExists(componentPath) && (await fs.stat(componentPath)).isDirectory()) {
+      const allFiles = await fs.readdir(componentPath);
+      filesToCheck = allFiles.filter(f => f.endsWith('.ts') || f.endsWith('.svelte')).map(f => path.join(componentPath, f));
+    } else if (await fs.pathExists(componentPath + '.svelte')) {
+      filesToCheck = [componentPath + '.svelte'];
+    }
+
+    // Read all files and check for imports
+    let needsFunctions = false;
+    let needsTypes = false;
+    const neededActions = new Set();
+    const actionImportRegex = /from ['"](\.\.\/)*actions\/?([\w-]*)['"]/g;
+    for (const file of filesToCheck) {
+      const content = await fs.readFile(file, 'utf-8');
+      if (content.match(/from ['"](\.\.\/)*functions['"]/)) needsFunctions = true;
+      if (content.match(/from ['"](\.\.\/)*types['"]/)) needsTypes = true;
+      let match;
+      while ((match = actionImportRegex.exec(content)) !== null) {
+        if (match[2]) neededActions.add(match[2]);
       }
     }
-    
-    // Copy actions if they exist
-    const actionsPath = path.join(libPath, 'actions');
-    if (await fs.pathExists(actionsPath)) {
-      const targetActionsPath = path.join(process.cwd(), outputDir, '..', 'actions');
-      await fs.copy(actionsPath, targetActionsPath);
-      console.log(`  📁 Copied: actions/`);
+
+    // Copy only needed dependencies
+    if (needsFunctions) {
+      const sourcePath = path.join(libPath, 'functions.ts');
+      const targetPath = path.join(process.cwd(), outputDir, '..', 'functions.ts');
+      if (await fs.pathExists(sourcePath)) {
+        await fs.copy(sourcePath, targetPath);
+        console.log('  📄 Copied: functions.ts');
+      }
     }
-    
+    if (needsTypes) {
+      const sourcePath = path.join(libPath, 'types.ts');
+      const targetPath = path.join(process.cwd(), outputDir, '..', 'types.ts');
+      if (await fs.pathExists(sourcePath)) {
+        await fs.copy(sourcePath, targetPath);
+        console.log('  📄 Copied: types.ts');
+      }
+    }
+    if (neededActions.size > 0) {
+      const actionsPath = path.join(libPath, 'actions');
+      const targetActionsPath = path.join(process.cwd(), outputDir, '..', 'actions');
+      await fs.ensureDir(targetActionsPath);
+      for (const action of neededActions) {
+        const actionFile = path.join(actionsPath, `${action}.ts`);
+        if (await fs.pathExists(actionFile)) {
+          await fs.copy(actionFile, path.join(targetActionsPath, `${action}.ts`));
+          console.log(`  � Copied action: ${action}.ts`);
+        }
+      }
+    }
   } catch (error) {
     console.warn(`⚠️ Warning: Could not copy all dependencies:`, error);
   }
