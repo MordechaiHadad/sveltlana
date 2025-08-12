@@ -36,22 +36,49 @@ export async function listComponents(): Promise<void> {
     for (const item of items) {
       const itemPath = path.join(componentsPath, item);
       const statResult = await fs.stat(itemPath);
-      
       if (statResult.isDirectory()) {
-        const hasIndex = await fs.pathExists(path.join(itemPath, 'index.ts'));
+        // Check all .svelte files in the directory for deprecation
+        const files = await fs.readdir(itemPath);
+        let isDeprecated = false;
+        for (const file of files) {
+          if (file.endsWith('.svelte')) {
+            const filePath = path.join(itemPath, file);
+            const content = await fs.readFile(filePath, 'utf-8');
+            const lines = content.split('\n');
+            for (const line of lines) {
+              const trimmed = line.trim().toLowerCase();
+              if (trimmed === '' || trimmed.startsWith('//')) continue;
+              if (trimmed.includes('deprecated')) {
+                isDeprecated = true;
+              }
+              break;
+            }
+          }
+        }
+        const indexPath = path.join(itemPath, 'index.ts');
+        const hasIndex = await fs.pathExists(indexPath);
         if (hasIndex) {
-          console.log(`  📦 ${item} (component suite)`);
+          console.log(`  📦 ${item} (component suite)${isDeprecated ? ' [DEPRECATED]' : ''}`);
           componentCount++;
-          
           // Show component files
-          const files = await fs.readdir(itemPath);
           const svelteFiles = files.filter((f: string) => f.endsWith('.svelte'));
           console.log(`     Files: ${files.length} (${svelteFiles.length} Svelte components)`);
         }
       } else if (item.endsWith('.svelte')) {
         // Standalone Svelte components
         const componentName = item.replace('.svelte', '');
-        console.log(`  🧩 ${componentName} (standalone component)`);
+        const content = await fs.readFile(itemPath, 'utf-8');
+        const lines = content.split('\n');
+        let isDeprecated = false;
+        for (const line of lines) {
+          const trimmed = line.trim().toLowerCase();
+          if (trimmed === '' || trimmed.startsWith('//')) continue;
+          if (trimmed.includes('deprecated')) {
+            isDeprecated = true;
+          }
+          break;
+        }
+        console.log(`  🧩 ${componentName} (standalone component)${isDeprecated ? ' [DEPRECATED]' : ''}`);
         componentCount++;
       }
     }
@@ -81,35 +108,67 @@ export async function listComponents(): Promise<void> {
 export async function downloadComponent(componentName: string, options: DownloadOptions): Promise<void> {
   try {
     console.log(`📥 Adding component: ${componentName}`);
-    
+
     const componentsPath = path.join(__dirname, '../../src/lib/sveltlana/components');
     const libPath = path.join(__dirname, '../../src/lib/sveltlana');
-    
-    // Check for folder-based component
+
     const folderPath = path.join(componentsPath, componentName);
     const svelteFilePath = path.join(componentsPath, `${componentName}.svelte`);
     const actionsPath = path.join(libPath, 'actions');
-    
+
     let sourcePath: string;
     let targetPath: string;
     let componentType: string;
-    
+
     if (await fs.pathExists(folderPath) && (await fs.stat(folderPath)).isDirectory()) {
       // Folder-based component
+  // deprecation warning handled inline
+      const indexPath = path.join(folderPath, 'index.ts');
+      if (await fs.pathExists(indexPath)) {
+        const firstLine = (await fs.readFile(indexPath, 'utf-8')).split('\n')[0].toLowerCase();
+        if (firstLine.includes('deprecated')) {
+          console.log('⚠️  This component is DEPRECATED.');
+        }
+      }
       sourcePath = folderPath;
-      targetPath = path.join(process.cwd(), options.output, componentName);
+      targetPath = path.join(process.cwd(), options.output, 'components', componentName);
       componentType = 'component suite';
+      await fs.ensureDir(path.dirname(targetPath));
+      await fs.copy(sourcePath, targetPath);
+      console.log(`✅ ${componentType} '${componentName}' added to ${targetPath}`);
+      if (options.deps) {
+        await copyDependencies(componentName, options.output);
+      }
     } else if (await fs.pathExists(svelteFilePath)) {
       // Standalone Svelte component
+      const content = await fs.readFile(svelteFilePath, 'utf-8');
+      const lines = content.split('\n');
+      for (const line of lines) {
+        const trimmed = line.trim().toLowerCase();
+        if (trimmed === '' || trimmed.startsWith('//')) continue;
+        if (trimmed.includes('deprecated')) {
+          console.log('⚠️  This component is DEPRECATED.');
+        }
+        break;
+      }
       sourcePath = svelteFilePath;
-      targetPath = path.join(process.cwd(), options.output, `${componentName}.svelte`);
+      targetPath = path.join(process.cwd(), options.output, 'components', `${componentName}.svelte`);
       componentType = 'standalone component';
+      await fs.ensureDir(path.dirname(targetPath));
+      await fs.copy(sourcePath, targetPath);
+      console.log(`✅ ${componentType} '${componentName}' added to ${targetPath}`);
+      if (options.deps) {
+        await copyDependencies(componentName, options.output);
+      }
     } else if (componentName.toLowerCase() === 'actions') {
       // Actions
       if (await fs.pathExists(actionsPath)) {
         sourcePath = actionsPath;
-        targetPath = path.join(process.cwd(), options.output, '..', 'actions');
+        targetPath = path.join(process.cwd(), options.output, 'actions');
         componentType = 'actions';
+        await fs.ensureDir(targetPath);
+        await fs.copy(sourcePath, targetPath);
+        console.log(`✅ ${componentType} added to ${targetPath}`);
       } else {
         console.error(`❌ Actions not found`);
         return;
@@ -119,37 +178,26 @@ export async function downloadComponent(componentName: string, options: Download
       console.log('💡 Run "sveltlana list" to see available components');
       return;
     }
-    
-    // Copy component files
-    await fs.ensureDir(path.dirname(targetPath));
-    await fs.copy(sourcePath, targetPath);
-    
-    console.log(`✅ ${componentType} '${componentName}' added to ${targetPath}`);
-    
-    // Copy dependencies if requested
-    if (options.deps && componentType !== 'actions') {
-      await copyDependencies(componentName, options.output);
-    }
-    
+
     // Check if component requires tailwind-merge by scanning files
     const requiresTailwindMerge = await checkComponentForTailwindMerge(sourcePath);
     if (requiresTailwindMerge) {
       console.log(`\n📦 Required dependency:`);
       console.log(`npm install tailwind-merge`);
     }
-    
+
     // Show usage instructions
     if (componentType === 'standalone component') {
       console.log(`\n📚 Usage example:`);
-      console.log(`import ${componentName} from '$lib/sveltlana/${componentName}.svelte';`);
+      console.log(`import ${componentName} from '$lib/sveltlana/components/${componentName}.svelte';`);
     } else if (componentType === 'component suite') {
       console.log(`\n📚 Usage example:`);
-      console.log(`import { ${componentName} } from '$lib/sveltlana/${componentName}';`);
+      console.log(`import { ${componentName} } from '$lib/sveltlana/components/${componentName}';`);
     } else if (componentType === 'actions') {
       console.log(`\n📚 Usage example:`);
-      console.log(`import { actionName } from '$lib/actions/actionName';`);
+      console.log(`import { actionName } from '$lib/sveltlana/actions/actionName';`);
     }
-    
+
   } catch (error) {
     console.error(`❌ Error adding component '${componentName}':`, error);
   }
@@ -247,7 +295,7 @@ async function copyDependencies(componentName: string, outputDir: string): Promi
     // Copy only needed dependencies
     if (needsFunctions) {
       const sourcePath = path.join(libPath, 'functions.ts');
-      const targetPath = path.join(process.cwd(), outputDir, '..', 'functions.ts');
+      const targetPath = path.join(process.cwd(), outputDir, 'functions.ts');
       if (await fs.pathExists(sourcePath)) {
         await fs.copy(sourcePath, targetPath);
         console.log('  📄 Copied: functions.ts');
@@ -255,7 +303,7 @@ async function copyDependencies(componentName: string, outputDir: string): Promi
     }
     if (needsTypes) {
       const sourcePath = path.join(libPath, 'types.ts');
-      const targetPath = path.join(process.cwd(), outputDir, '..', 'types.ts');
+      const targetPath = path.join(process.cwd(), outputDir, 'types.ts');
       if (await fs.pathExists(sourcePath)) {
         await fs.copy(sourcePath, targetPath);
         console.log('  📄 Copied: types.ts');
@@ -263,13 +311,13 @@ async function copyDependencies(componentName: string, outputDir: string): Promi
     }
     if (neededActions.size > 0) {
       const actionsPath = path.join(libPath, 'actions');
-      const targetActionsPath = path.join(process.cwd(), outputDir, '..', 'actions');
+      const targetActionsPath = path.join(process.cwd(), outputDir, 'actions');
       await fs.ensureDir(targetActionsPath);
       for (const action of neededActions) {
         const actionFile = path.join(actionsPath, `${action}.ts`);
         if (await fs.pathExists(actionFile)) {
           await fs.copy(actionFile, path.join(targetActionsPath, `${action}.ts`));
-          console.log(`  � Copied action: ${action}.ts`);
+          console.log(`  📄 Copied action: ${action}.ts`);
         }
       }
     }
