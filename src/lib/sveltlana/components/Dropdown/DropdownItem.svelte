@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getContext, Snippet } from 'svelte';
+	import { getContext, type Snippet } from 'svelte';
 	import type { IContext } from './context';
 	import { toggle } from './functions';
 

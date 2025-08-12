@@ -1,55 +1,19 @@
-<!-- <script lang="ts">
-    import Swipable from "$lib/components/Swipable/Swipable.svelte";
-    import SwipableAction from "$lib/components/Swipable/SwipableAction.svelte";
-    import SwipableContent from "$lib/components/Swipable/SwipableContent.svelte";
-  
-    const handleArchive = () => {
-        console.log('Item archived!');
-    };
-    
-    const handleDelete = () => {
-        console.log('Item deleted!');
-    };
+<script lang="ts">
+	import Dropdown from '$lib/sveltlana/components/Dropdown';
+	let selected = '';
 </script>
 
-<Swipable class="w-96 mb-4 bg-transparent" thresholdReachedClass="bg-blue-500">
-    <SwipableAction 
-        side="left" 
-        class="text-black px-4"
-        onAction={handleArchive}
-    >
-        <span>Archive</span>
-    </SwipableAction>
-    
-    <SwipableContent class="bg-white p-4 border rounded shadow">
-        <div>Swipe me left or right</div>
-    </SwipableContent>
-    
-    <SwipableAction 
-        side="right" 
-        class="text-black px-4"
-        onAction={handleDelete}
-    >
-        <span>Delete</span>
-    </SwipableAction>
-</Swipable> -->
+<div class="h-[70rem]"></div>
+<Dropdown expanded={(e) => {}}>
+	<Dropdown.Trigger class="px-4 py-2 bg-blue-500 text-white rounded">
+		Open Dropdown
+	</Dropdown.Trigger>
+	<Dropdown.Content class="bg-white border rounded shadow p-2">
+		<Dropdown.Item select={() => (selected = 'Option 1')}>Option 1</Dropdown.Item>
+		<Dropdown.Item select={() => (selected = 'Option 2')}>Option 2</Dropdown.Item>
+		<Dropdown.Seperator class="my-1 border-t" />
+		<Dropdown.Item select={() => (selected = 'Option 3')}>Option 3</Dropdown.Item>
+	</Dropdown.Content>
+</Dropdown>
 
-<script>
-	import ImageModal from '$lib/components/ImageModal.svelte';
-
-	let isModalOpen = false;
-	const imageSrc =
-		'https://media.istockphoto.com/id/516318760/photo/red-fox-vulpes-vulpes.jpg?s=612x612&w=0&k=20&c=jelfBarPxOUUjhiRWDtXlDMAUJJqUih3nnTo7HI4zx8=';
-
-	function openModal() {
-		isModalOpen = true;
-	}
-
-	function closeModal() {
-		isModalOpen = false;
-	}
-</script>
-
-<button onclick={openModal}>Open Image</button>
-
-<ImageModal src={imageSrc} alt="Image description" isOpen={isModalOpen} onClose={closeModal} />
+<p>Selected: {selected}</p>

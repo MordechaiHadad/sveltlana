@@ -1,30 +1,29 @@
 <script lang="ts">
-	import { getContext, Snippet } from 'svelte';
-	import type { IContext } from './context';
-	import { debounce, toggle } from './functions';
+import { getContext, type Snippet } from 'svelte';
+import type { IContext } from './context';
+import { toggle } from "./functions"
 
-	let {
-		class: className = '',
-		children
-	}: {
-		class?: string;
-		children?: Snippet;
-	} = $props();
+let {
+	class: className = '',
+	children
+}: {
+	class?: string;
+	children: Snippet;
+} = $props();
 
-	let context: IContext = getContext('dropdown');
-	let debounceState = { isDebouncing: false };
+let context: IContext = getContext('dropdown');
 
-	const handleClick = () => {
-		debounce(() => toggle(context), 400, debounceState);
-	};
+const handleClick = () => {
+	toggle(context);
+};
 
-	const handleEnter = (event: KeyboardEvent) => {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			if (context.isExpanded && context.currentIndex > -1) return;
-			else handleClick();
-		}
-	};
+const handleEnter = (event: KeyboardEvent) => {
+	if (event.key === 'Enter' || event.key === ' ') {
+		event.preventDefault();
+		if (context.isExpanded && context.currentIndex > -1) return;
+		else handleClick();
+	}
+};
 </script>
 
 <button onclick={handleClick} class={className} onkeydown={handleEnter}>

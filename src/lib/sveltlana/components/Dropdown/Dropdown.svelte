@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setContext, Snippet } from 'svelte';
+	import { setContext, type Snippet } from 'svelte';
 	import type { IContext } from './context';
 	import { twMerge } from 'tailwind-merge';
 	import { clickOutside } from '../../actions/clickOutside';

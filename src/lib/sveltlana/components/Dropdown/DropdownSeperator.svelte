@@ -6,4 +6,4 @@
     let { class: className = '' }: Props = $props();
 </script>
 
-<div class={className} data-seperator />
+<div class={className} data-seperator></div>
