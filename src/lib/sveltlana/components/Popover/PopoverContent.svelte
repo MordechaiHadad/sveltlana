@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getDynamicPosition } from '../../functions';
 	import type { Alignment } from '../../types';
-	import { getContext, Snippet } from 'svelte';
+	import { getContext, type Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
 	import type { IContext } from './context';
 	import { slide } from 'svelte/transition';
@@ -13,7 +13,7 @@
 	}: {
 		transition?: typeof slide;
 		class?: string;
-		children?: Snippet;
+		children: Snippet;
 	} = $props();
 
 	let position: Alignment = 'bottom';
