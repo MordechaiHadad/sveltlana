@@ -1,6 +1,6 @@
 {
   "name": "sveltlana",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Headless Svelte components CLI - Add beautiful components to your Svelte projects",
   "keywords": ["svelte", "components", "headless", "cli", "ui"],
   "repository": {
@@ -30,24 +30,19 @@
       "svelte": "./dist/index.js"
     },
     "./Accordion": {
-      "types": "./dist/components/Accordion/index.d.ts",
-      "svelte": "./dist/components/Accordion/index.js"
+      "svelte": "./dist/sveltlana/components/Accordion/index.svelte"
     },
     "./Carousel": {
-      "types": "./dist/components/Carousel/index.d.ts",
-      "svelte": "./dist/components/Carousel/index.js"
+      "svelte": "./dist/sveltlana/components/Carousel/index.svelte"
     },
     "./Dropdown": {
-      "types": "./dist/components/Dropdown/index.d.ts",
-      "svelte": "./dist/components/Dropdown/index.js"
+      "svelte": "./dist/sveltlana/components/Dropdown/index.svelte"
     },
     "./Popover": {
-      "types": "./dist/components/Popover/index.d.ts",
-      "svelte": "./dist/components/Popover/index.js"
+      "svelte": "./dist/sveltlana/components/Popover/index.svelte"
     },
     "./Swipable": {
-      "types": "./dist/components/Swipable/index.d.ts",
-      "svelte": "./dist/components/Swipable/index.js"
+      "svelte": "./dist/sveltlana/components/Swipable/index.svelte"
     }
   },
   "files": [

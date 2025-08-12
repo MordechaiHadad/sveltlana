@@ -3,14 +3,19 @@
 /// <reference types="node" />
 
 import { Command } from 'commander';
+
 import { listComponents, downloadMultiple, removeMultiple } from './commands/index.js';
+
+
+import pkg from '../../package.json' assert { type: 'json' };
+const { version } = pkg;
 
 const program = new Command();
 
 program
   .name('sveltlana')
   .description('CLI tool for Sveltlana headless components')
-  .version('0.0.1');
+  .version(version);
 
 program
   .command('list')

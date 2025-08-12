@@ -1,7 +1,8 @@
+<!-- DEPRECATED: This component is deprecated and should not be used. -->
+
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import { browser } from '$app/environment';
 
 	type Props = {
 		children: Snippet;
@@ -10,12 +11,12 @@
 	};
 	let { children, isOpen = false, styles = {} }: Props = $props();
 
-	$effect(() => {
-		if (browser) {
-			if (isOpen) document.body.style.overflow = 'hidden';
-			else document.body.style.overflow = 'auto';
-		}
-	});
+	// $effect(() => {
+	// 	if (browser) {
+	// 		if (isOpen) document.body.style.overflow = 'hidden';
+	// 		else document.body.style.overflow = 'auto';
+	// 	}
+	// });
 
 	onMount(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
