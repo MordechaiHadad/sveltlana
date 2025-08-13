@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getContext } from 'svelte';
     import { twMerge } from 'tailwind-merge';
-    import type { SwipableContext } from './context';
+    import type { Context } from './context';
 
     type Props = {
         class?: string;
@@ -18,7 +18,7 @@
         children 
     }: Props = $props();
     
-    const context: SwipableContext = getContext('swipable');
+    const context: Context = getContext('swipable');
     
     let isThresholdReached = $derived(
         context.thresholdMet && 

@@ -1,6 +1,6 @@
-import type { IContext } from './context.js';
+import type { Context } from './context.js';
 
-export const toggle = (context: IContext) => {
+export const toggle = (context: Context) => {
 	context.currentIndex = -1;
 	context.isExpanded = !context.isExpanded;
 };

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { SwipableContext } from './context';
+	import type { Context } from './context';
 
 	type Props = {
 		class?: string;
@@ -19,7 +19,7 @@
 		preventNextClick: false // Flag to prevent the next click event
 	});
 
-	let context: SwipableContext = $state({
+	let context: Context = $state({
 		swipingDirection: 'none',
 		swipeDistance: 0,
 		maxSwipe: 0,

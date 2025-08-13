@@ -1,21 +1,21 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
-	import type { IContext } from './context';
+	import type { Context } from './context';
 	import { toggle } from './functions';
 
 	type Props = {
 		autoCloseOnClick?: boolean;
 		class?: string;
-		select: (context: IContext) => void;
-		children?: Snippet;
+		onselect: (context: Context) => void;
+		children: Snippet;
 	};
 
-	let { autoCloseOnClick = true, class: className = '', select, children }: Props = $props();
+	let { autoCloseOnClick = true, class: className = '', onselect, children }: Props = $props();
 
-	let context: IContext = getContext('dropdown');
+	let context: Context = getContext('dropdown');
 
 	const handleClick = () => {
-		select(context);
+		onselect(context);
 		if (autoCloseOnClick) toggle(context);
 	};
 

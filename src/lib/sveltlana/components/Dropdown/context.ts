@@ -1,4 +1,4 @@
-export interface IContext {
+export type Context = {
     isExpanded: boolean;
     currentIndex: number;
-}
+};

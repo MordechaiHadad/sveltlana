@@ -1,25 +1,25 @@
 <script lang="ts">
 	import { setContext, type Snippet } from 'svelte';
-	import type { IContext } from './context';
+	import type { Context } from './context';
 	import { twMerge } from 'tailwind-merge';
 	import { clickOutside } from '../../actions/clickOutside';
 
 	type Props = {
 		closeOnOutsideClick?: boolean;
 		class?: string;
-		expanded: (isExpanded: boolean) => void;
+		onexpand: (isExpanded: boolean) => void;
 		children: Snippet;
 	};
 
-	let { closeOnOutsideClick = true, class: className = '', expanded, children }: Props = $props();
+	let { closeOnOutsideClick = true, class: className = '', onexpand, children }: Props = $props();
 
-	let context: IContext = $state({
+	let context: Context = $state({
 		isExpanded: false,
 		currentIndex: -1
 	});
 
 	$effect(() => {
-		expanded(context.isExpanded);
+		onexpand(context.isExpanded);
 	});
 	let self: HTMLElement;
 	let currentItem: HTMLElement;

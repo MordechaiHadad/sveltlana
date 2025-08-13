@@ -3,7 +3,7 @@
 	import type { Alignment } from '../../types';
 	import { getContext, type Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { IContext } from './context';
+	import type { Context } from './context';
 	import { slide } from 'svelte/transition';
 
 	let {
@@ -17,7 +17,7 @@
 	} = $props();
 
 	let position: Alignment = 'bottom';
-	let context: IContext = getContext('popover');
+	let context: Context = getContext('popover');
 
 	const setDynamicPositioning = (node: HTMLElement) => {
 		position = getDynamicPosition(node, 'vertical');

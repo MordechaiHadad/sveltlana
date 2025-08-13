@@ -1,6 +1,6 @@
 <script lang="ts">
 import { getContext, type Snippet } from 'svelte';
-import type { IContext } from './context';
+import type { Context } from './context';
 import { toggle } from "./functions"
 
 let {
@@ -11,7 +11,7 @@ let {
 	children: Snippet;
 } = $props();
 
-let context: IContext = getContext('dropdown');
+let context: Context = getContext('dropdown');
 
 const handleClick = () => {
 	toggle(context);

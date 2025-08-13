@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
-	import type { IContext } from './context';
+	import type { Context } from './context';
 	import { slide } from 'svelte/transition';
 	import { twMerge } from 'tailwind-merge';
 	import type { Alignment } from '../../types';
@@ -12,7 +12,7 @@
 		transition = slide
 	}: { class?: string; children: Snippet; transition?: typeof slide } = $props();
 
-	let context: IContext = getContext('dropdown');
+	let context: Context = getContext('dropdown');
 	let position: Alignment = 'bottom';
 
 	const setDynamicPositioning = (node: HTMLElement) => {

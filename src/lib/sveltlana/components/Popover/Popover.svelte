@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { IContext } from './context';
+	import type { Context } from './context';
 	import { twMerge } from 'tailwind-merge';
 	import { setContext, type Snippet } from 'svelte';
 	import { clickOutside } from '../../actions/clickOutside';
@@ -14,7 +14,7 @@
 		children: Snippet;
 	} = $props();
 
-	let context: IContext = $state({
+	let context: Context = $state({
 		isExpanded: false
 	});
 
