@@ -3,36 +3,40 @@
 	import type { Context } from './context';
 	import { twMerge } from 'tailwind-merge';
 	import { clickOutside } from '../../actions/clickOutside';
+	import { toggle } from './functions';
 
 	type Props = {
 		closeOnOutsideClick?: boolean;
 		class?: string;
 		onexpand: (isExpanded: boolean) => void;
+		oncollapse: (isExpanded: boolean) => void;
 		children: Snippet;
 	};
-
-	let { closeOnOutsideClick = true, class: className = '', onexpand, children }: Props = $props();
-
-	let context: Context = $state({
-		isExpanded: false,
-		currentIndex: -1
-	});
-
-	$effect(() => {
-		onexpand(context.isExpanded);
-	});
 	let self: HTMLElement;
 	let currentItem: HTMLElement;
 
-	const close = () => {
-		context.isExpanded = false;
-		context.currentIndex = -1;
-	};
+	let {
+		closeOnOutsideClick = true,
+		class: className = '',
+		onexpand,
+		children,
+		oncollapse
+	}: Props = $props();
+
+	let context: Context = $state({
+		isExpanded: false,
+		currentIndex: -1,
+		onExpand: onexpand,
+		onCollapse: oncollapse
+	});
 
 	setContext('dropdown', context);
 
 	const handleKeys = (event: KeyboardEvent) => {
-		if (event.key === 'Escape') close();
+		if (event.key === 'Escape') {
+			toggle(context);
+			oncollapse(context.isExpanded);
+		}
 		navigateDropdownItems(event);
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();

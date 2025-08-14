@@ -17,7 +17,9 @@
 
 	const handleClick = () => {
 		onselect(context);
-		if (autoCloseOnClick) toggle(context);
+		if (!autoCloseOnClick) return;
+		toggle(context);
+		context.onCollapse(context.isExpanded);
 	};
 
 	const onHover = (event: MouseEvent) => {

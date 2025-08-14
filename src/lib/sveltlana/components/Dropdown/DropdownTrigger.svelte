@@ -17,6 +17,7 @@ let context: Context = getContext('dropdown');
 
 const handleClick = () => {
 	toggle(context);
+	context.onExpand(context.isExpanded);
 };
 
 const handleEnter = (event: KeyboardEvent) => {
