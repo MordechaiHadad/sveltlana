@@ -5,10 +5,12 @@ import { toggle } from "./functions"
 
 let {
 	class: className = '',
-	children
+	children,
+	disabled = false
 }: {
 	class?: string;
 	children: Snippet;
+	disabled: boolean;
 } = $props();
 
 let context: Context = getContext('dropdown');
@@ -26,6 +28,6 @@ const handleEnter = (event: KeyboardEvent) => {
 };
 </script>
 
-<button onclick={handleClick} class={className} onkeydown={handleEnter}>
+<button onclick={handleClick} class={className} onkeydown={handleEnter} {disabled}>
 	{@render children()}
 </button>

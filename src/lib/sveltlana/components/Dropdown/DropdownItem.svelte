@@ -8,9 +8,10 @@
 		class?: string;
 		onselect: (context: Context) => void;
 		children: Snippet;
+		disabled: boolean;
 	};
 
-	let { autoCloseOnClick = true, class: className = '', onselect, children }: Props = $props();
+	let { autoCloseOnClick = true, class: className = '', onselect, children, disabled = false }: Props = $props();
 
 	let context: Context = getContext('dropdown');
 
@@ -37,6 +38,7 @@
 	onmouseover={onHover}
 	onmouseout={onHoverOut}
 	tabindex="-1"
+	{disabled}
 >
 	{@render children()}
 </button>
