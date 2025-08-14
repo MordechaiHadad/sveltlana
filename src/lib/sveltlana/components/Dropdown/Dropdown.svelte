@@ -8,8 +8,8 @@
 	type Props = {
 		closeOnOutsideClick?: boolean;
 		class?: string;
-		onexpand: (isExpanded: boolean) => void;
-		oncollapse: (isExpanded: boolean) => void;
+		onexpand?: (isExpanded: boolean) => void;
+		oncollapse?: (isExpanded: boolean) => void;
 		children: Snippet;
 	};
 	let self: HTMLElement;
@@ -18,9 +18,9 @@
 	let {
 		closeOnOutsideClick = true,
 		class: className = '',
-		onexpand,
+		onexpand = () => {},
 		children,
-		oncollapse
+		oncollapse = () => {},
 	}: Props = $props();
 
 	let context: Context = $state({
