@@ -6,12 +6,12 @@
 	type Props = {
 		autoCloseOnClick?: boolean;
 		class?: string;
-		onselect: (context: Context) => void;
+		onselect?: (context: Context) => void;
 		children: Snippet;
 		disabled?: boolean;
 	};
 
-	let { autoCloseOnClick = true, class: className = '', onselect, children, disabled = false }: Props = $props();
+	let { autoCloseOnClick = true, class: className = '', onselect = () => {}, children, disabled = false }: Props = $props();
 
 	let context: Context = getContext('dropdown');
 
