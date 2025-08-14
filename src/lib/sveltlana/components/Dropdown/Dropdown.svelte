@@ -110,7 +110,7 @@
 	tabindex="-1"
 	onkeydown={handleKeys}
 	onfocusout={() => {
-		if (closeOnOutsideClick) {
+		if (closeOnOutsideClick && context.isExpanded) {
 			toggle(context);
 			oncollapse(context.isExpanded);
 		}
