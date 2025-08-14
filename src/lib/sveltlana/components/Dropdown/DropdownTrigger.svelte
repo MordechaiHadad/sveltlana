@@ -10,7 +10,7 @@ let {
 }: {
 	class?: string;
 	children: Snippet;
-	disabled: boolean;
+	disabled?: boolean;
 } = $props();
 
 let context: Context = getContext('dropdown');

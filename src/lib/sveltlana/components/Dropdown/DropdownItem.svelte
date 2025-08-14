@@ -8,7 +8,7 @@
 		class?: string;
 		onselect: (context: Context) => void;
 		children: Snippet;
-		disabled: boolean;
+		disabled?: boolean;
 	};
 
 	let { autoCloseOnClick = true, class: className = '', onselect, children, disabled = false }: Props = $props();
