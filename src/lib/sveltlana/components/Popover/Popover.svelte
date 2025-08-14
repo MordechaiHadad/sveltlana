@@ -2,7 +2,6 @@
 	import type { Context } from './context';
 	import { twMerge } from 'tailwind-merge';
 	import { setContext, type Snippet } from 'svelte';
-	import { clickOutside } from '../../actions/clickOutside';
 
 	let {
 		closeOnOutsideClick = true,
@@ -28,10 +27,8 @@
 <div
 	class={twMerge('relative inline-block', className)}
 	tabindex="-1"
-	use:clickOutside={{
-		callback: () => {
-			if (closeOnOutsideClick) close();
-		}
+	onfocusout={() => {
+		if (closeOnOutsideClick) close();
 	}}
 >
 	{@render children()}

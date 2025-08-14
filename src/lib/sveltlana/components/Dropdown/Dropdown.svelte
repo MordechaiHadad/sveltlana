@@ -2,7 +2,6 @@
 	import { setContext, type Snippet } from 'svelte';
 	import type { Context } from './context';
 	import { twMerge } from 'tailwind-merge';
-	import { clickOutside } from '../../actions/clickOutside';
 	import { toggle } from './functions';
 
 	type Props = {
@@ -12,15 +11,15 @@
 		oncollapse?: (isExpanded: boolean) => void;
 		children: Snippet;
 	};
-	let self: HTMLElement;
-	let currentItem: HTMLElement;
+	let self: HTMLElement | undefined = $state(undefined);
+	let currentItem: HTMLElement | undefined = $state(undefined);
 
 	let {
 		closeOnOutsideClick = true,
 		class: className = '',
 		onexpand = () => {},
 		children,
-		oncollapse = () => {},
+		oncollapse = () => {}
 	}: Props = $props();
 
 	let context: Context = $state({
@@ -109,15 +108,12 @@
 	role="button"
 	bind:this={self}
 	tabindex="-1"
-	use:clickOutside={{
-		callback: () => {
-			if (closeOnOutsideClick) close();
-		}
-	}}
 	onkeydown={handleKeys}
-	onmouseover={() => {
-		context.currentIndex = -1;
-		currentItem && currentItem.removeAttribute('data-active');
+	onfocusout={() => {
+		if (closeOnOutsideClick) {
+			toggle(context);
+			oncollapse(context.isExpanded);
+		}
 	}}
 >
 	{@render children()}
