@@ -36,13 +36,17 @@
 {#if isOpen}
 	<div
 		class={twMerge(
-			'fixed z-50 flex size-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-xs',
+			'fixed inset-0 z-[9999] flex w-full h-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-xs',
 			styles.container
 		)}
+		role="dialog"
+		aria-hidden={!isOpen}
 	>
 		<!-- Modal Content -->
-		<div class={twMerge('z-50 flex w-full place-content-center', styles.content)}>
+		<div class={twMerge('z-[10000] flex w-full items-center justify-center p-4', styles.content)}>
 			{@render children()}
 		</div>
 	</div>
 {/if}
+
+
