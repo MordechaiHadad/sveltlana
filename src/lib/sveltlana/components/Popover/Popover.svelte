@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Context } from './context';
+	import { onClickOutside } from '../../actions/onClickOutside';
 	import { twMerge } from 'tailwind-merge';
 	import { setContext, type Snippet } from 'svelte';
 
@@ -27,13 +28,12 @@
 <div
 	class={twMerge('relative inline-block', className)}
 	tabindex="-1"
-	onfocusout={(event) => {
-		if (
-			closeOnOutsideClick &&
-			context.isExpanded &&
-			!event.currentTarget.contains(event.relatedTarget as Node)
-		)
-			close();
+	use:onClickOutside={{
+		callback: () => {
+			if (closeOnOutsideClick && context.isExpanded) {
+				close();
+			}
+		}
 	}}
 >
 	{@render children()}

@@ -3,6 +3,7 @@
 	import type { Context } from './context';
 	import { twMerge } from 'tailwind-merge';
 	import { toggle } from './functions';
+	import { onClickOutside } from '../../actions/onClickOutside';
 
 	type Props = {
 		closeOnOutsideClick?: boolean;
@@ -109,14 +110,12 @@
 	bind:this={self}
 	tabindex="-1"
 	onkeydown={handleKeys}
-	onfocusout={(event) => {
-		if (
-			closeOnOutsideClick &&
-			context.isExpanded &&
-			!event.currentTarget.contains(event.relatedTarget as Node)
-		) {
-			toggle(context);
-			oncollapse(context.isExpanded);
+	use:onClickOutside={{
+		callback: () => {
+			if (closeOnOutsideClick && context.isExpanded) {
+				toggle(context);
+				oncollapse(context.isExpanded);
+			}
 		}
 	}}
 >
