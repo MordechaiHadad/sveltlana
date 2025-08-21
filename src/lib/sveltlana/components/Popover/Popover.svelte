@@ -27,8 +27,13 @@
 <div
 	class={twMerge('relative inline-block', className)}
 	tabindex="-1"
-	onfocusout={() => {
-		if (closeOnOutsideClick && context.isExpanded) close();
+	onfocusout={(event) => {
+		if (
+			closeOnOutsideClick &&
+			context.isExpanded &&
+			!event.currentTarget.contains(event.relatedTarget as Node)
+		)
+			close();
 	}}
 >
 	{@render children()}

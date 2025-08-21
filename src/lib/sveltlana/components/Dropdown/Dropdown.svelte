@@ -39,7 +39,7 @@
 		navigateDropdownItems(event);
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
-			if (context.isExpanded && context.currentIndex > -1) currentItem.click();
+			if (context.isExpanded && context.currentIndex > -1) currentItem?.click();
 		}
 	};
 
@@ -82,8 +82,8 @@
 	};
 
 	const getActiveItemIndex = () => {
-		const activeItem = self.querySelector('[data-active]');
-		const target = self.querySelector('#dropdown-content') as HTMLElement;
+		const activeItem = self?.querySelector('[data-active]');
+		const target = self?.querySelector('#dropdown-content') as HTMLElement;
 		const items = Array.from(target.children);
 		const index = activeItem ? items.indexOf(activeItem) : -1;
 		return index;
@@ -109,8 +109,12 @@
 	bind:this={self}
 	tabindex="-1"
 	onkeydown={handleKeys}
-	onfocusout={() => {
-		if (closeOnOutsideClick && context.isExpanded) {
+	onfocusout={(event) => {
+		if (
+			closeOnOutsideClick &&
+			context.isExpanded &&
+			!event.currentTarget.contains(event.relatedTarget as Node)
+		) {
 			toggle(context);
 			oncollapse(context.isExpanded);
 		}

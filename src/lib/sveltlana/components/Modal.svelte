@@ -1,22 +1,22 @@
-<!-- DEPRECATED: This component is deprecated and should not be used. -->
-
 <script lang="ts">
 	import { onMount, type Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
+	
+	const browser: boolean = typeof window !== 'undefined';
 
 	type Props = {
 		children: Snippet;
 		isOpen?: boolean;
 		styles?: { container?: string; content?: string };
 	};
-	let { children, isOpen = false, styles = {} }: Props = $props();
+	let { children, isOpen = $bindable(false), styles = {} }: Props = $props();
 
-	// $effect(() => {
-	// 	if (browser) {
-	// 		if (isOpen) document.body.style.overflow = 'hidden';
-	// 		else document.body.style.overflow = 'auto';
-	// 	}
-	// });
+	$effect(() => {
+		if (!browser) return;
+
+		if (isOpen) document.body.style.overflow = 'hidden';
+		else document.body.style.overflow = 'auto';
+	});
 
 	onMount(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
@@ -41,12 +41,7 @@
 		)}
 	>
 		<!-- Modal Content -->
-		<div
-			class={twMerge(
-				'z-50 flex w-full place-content-center',
-				styles.content
-			)}
-		>
+		<div class={twMerge('z-50 flex w-full place-content-center', styles.content)}>
 			{@render children()}
 		</div>
 	</div>
