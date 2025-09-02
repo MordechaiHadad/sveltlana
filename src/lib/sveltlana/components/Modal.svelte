@@ -36,7 +36,7 @@
 {#if isOpen}
 	<div
 		class={twMerge(
-			'fixed inset-0 z-[9999] flex w-full h-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-xs',
+			'fixed inset-0 z-[9999] place-content-center flex w-full h-full flex-wrap overflow-y-auto overflow-x-hidden bg-neutral-600/50 backdrop-blur-xs',
 			styles.container
 		)}
 		role="dialog"
