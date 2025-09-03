@@ -22,12 +22,13 @@
 		value = $bindable(),
 		type = 'text' as InputType,
 		error = null,
-		name = '',
+		label = '',
+		required = false,
 		oninput,
 		onblur,
 		disabled = false,
 		placeholder = '',
-		styles = { wrapper: '', label: '', input: '', error: '' }
+		styles = { wrapper: '', label: '', input: '', error: '', asterisk: '' }
 	} = $props();
 
 	function handleInput(event: Event) {
@@ -40,17 +41,18 @@
 </script>
 
 <div class={styles.wrapper}>
-	{#if name}
-		<label for={uid} class={styles.label}>{name}</label>
+	{#if label}
+		<label for={uid} class={styles.label}>{label}{#if required}<span class={styles.asterisk}> *</span>{/if}</label>
 	{/if}
 
 	<input
 		id={uid}
-		{name}
+		name={label}
 		{type}
 		class={styles.input}
 		{disabled}
 		{placeholder}
+		{required}
 		bind:value
 		oninput={handleInput}
 		onblur={handleBlur}
