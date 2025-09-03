@@ -1,42 +1,45 @@
 <script lang="ts">
-	import Modal from '$lib/sveltlana/components/Modal.svelte';
 	import { setContext, type Snippet } from 'svelte';
 	import type { Context } from './context';
-	import { twMerge } from 'tailwind-merge';
 
 	let {
 		isOpen = $bindable(false),
-		onConfirm = () => {},
-		onCancel = () => {},
-		styles = {},
-		children
+		onconfirm = () => {},
+		oncancel = () => {},
+		children,
+		class: className = ''
 	}: {
 		isOpen?: boolean;
-		onConfirm?: () => void;
-		onCancel?: () => void;
-		styles?: { container?: string; content?: string };
+		onconfirm?: () => void;
+		oncancel?: () => void;
 		children: Snippet;
+		class?: string;
 	} = $props();
 
+	let dialog: HTMLDialogElement | null;
+
 	const handleConfirm = () => {
-		onConfirm?.();
+		onconfirm?.();
 		isOpen = false;
+		dialog?.close();
 	};
 
 	const handleCancel = () => {
-		onCancel?.();
+		oncancel?.();
 		isOpen = false;
+		dialog?.close();
 	};
 
-	let context: Context = $state({ isOpen, onConfirm: handleConfirm, onCancel: handleCancel });
-
 	$effect(() => {
-		context.isOpen = isOpen;
+		if (isOpen) dialog?.showModal();
+		else dialog?.close();
 	});
+
+	let context: Context = $state({ onConfirm: handleConfirm, onCancel: handleCancel });
 
 	setContext('alertdialog', context);
 </script>
 
-<Modal bind:isOpen styles={{ container: styles.container, content: twMerge("h-fit flex-col", styles.content) }}>
+<dialog bind:this={dialog} class={className}>
 	{@render children()}
-</Modal>
+</dialog>

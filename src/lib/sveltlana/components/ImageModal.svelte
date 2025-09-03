@@ -1,12 +1,13 @@
+<!-- DEPRECATED: This component is deprecated and should not be used. -->
+
 <script lang="ts">
-	import Modal from './Modal.svelte';
 	import { twMerge } from 'tailwind-merge';
 
 	type Props = {
 		src: string;
 		alt?: string;
 		isOpen?: boolean;
-		styles?: { container?: string; content?: string; image?: string };
+		styles?: { dialog?: string; image?: string };
 		onClose?: () => void;
 	};
 
@@ -154,13 +155,7 @@
 	});
 </script>
 
-<Modal
-	{isOpen}
-	styles={{
-		container: styles.container,
-		content: twMerge('flex items-center justify-center', styles.content)
-	}}
->
+<dialog class={twMerge('flex items-center justify-center', styles.dialog)}>
 	<div
 		class={twMerge(
 			'relative overflow-hidden h-full w-full flex items-center justify-center',
@@ -199,4 +194,4 @@
 			×
 		</button>
 	</div>
-</Modal>
+</dialog>

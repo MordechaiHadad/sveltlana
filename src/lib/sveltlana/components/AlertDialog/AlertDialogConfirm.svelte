@@ -1,18 +1,17 @@
 <script lang="ts">
-    import { twMerge } from 'tailwind-merge';
-    import { getContext } from 'svelte';
-    import type { Context } from './context';
+	import { twMerge } from 'tailwind-merge';
+	import { getContext, Snippet } from 'svelte';
+	import type { Context } from './context';
 
-    let { class: className = '', children = 'Confirm' }: { class?: string; children?: any } = $props();
+	let { class: className = '', children }: { class?: string; children?: Snippet } = $props();
 
-    const context = getContext('alertdialog') as Context;
+	const context = getContext('alertdialog') as Context;
 
-    const handleClick = () => {
-        context.onConfirm?.();
-        context.isOpen = false;
-    };
+	const handleClick = () => {
+		context.onConfirm?.();
+	};
 </script>
 
 <button type="button" class={twMerge('inline-flex items-center', className)} onclick={handleClick}>
-    {@render children()}
+	{@render children()}
 </button>

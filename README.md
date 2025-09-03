@@ -56,7 +56,7 @@ npm install sveltlana
 
 ```bash
 # Add a single component
-npx sveltlana add Modal
+npx sveltlana add Dropdown 
 
 # Use in your Svelte component
 <script>
