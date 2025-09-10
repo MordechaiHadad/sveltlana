@@ -1,6 +1,6 @@
 {
   "name": "sveltlana",
-  "version": "0.0.22",
+  "version": "0.1.0",
   "description": "Headless Svelte components CLI - Add beautiful components to your Svelte projects",
   "keywords": ["svelte", "components", "headless", "cli", "ui"],
   "repository": {
