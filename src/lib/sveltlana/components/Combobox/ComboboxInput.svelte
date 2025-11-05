@@ -5,7 +5,7 @@
 	let {
 		class: className = '',
 		disabled = false,
-		value = '',
+		value = $bindable(''),
 		placeholder = '',
 		oninput: parentOnInput
 	}: {
