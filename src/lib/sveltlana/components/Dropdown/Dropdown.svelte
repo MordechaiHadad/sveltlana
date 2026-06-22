@@ -23,7 +23,10 @@
 		oncollapse = () => {}
 	}: Props = $props();
 
+	const uid = crypto.randomUUID();
+
 	let context: Context = $state({
+		uid,
 		isExpanded: false,
 		currentIndex: -1,
 		onExpand: onexpand,

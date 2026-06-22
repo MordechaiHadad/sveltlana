@@ -29,6 +29,12 @@ const handleEnter = (event: KeyboardEvent) => {
 };
 </script>
 
-<button onclick={handleClick} class={className} onkeydown={handleEnter} {disabled}>
+<button
+	onclick={handleClick}
+	class={className}
+	onkeydown={handleEnter}
+	{disabled}
+	style:anchor-name="--dropdown-{context.uid}"
+>
 	{@render children()}
 </button>
