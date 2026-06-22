@@ -1,8 +1,14 @@
 {
   "name": "sveltlana",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Headless Svelte components CLI - Add beautiful components to your Svelte projects",
-  "keywords": ["svelte", "components", "headless", "cli", "ui"],
+  "keywords": [
+    "svelte",
+    "components",
+    "headless",
+    "cli",
+    "ui"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/MordechaiHadad/sveltlana.git"
