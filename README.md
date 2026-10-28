@@ -42,6 +42,7 @@ npm install sveltlana
 
 - **📦 Accordion** - Collapsible content panels
 - **📦 Carousel** - Image/content carousel with touch support
+- **🧩 Marquee** - Continuously scrolling, looping content banners
 - **📦 Dropdown** - Flexible dropdown menus
 - **🧩 Modal** - Accessible modal dialogs
 - **🧩 ImageModal** - Zoomable image viewer with gestures
@@ -85,6 +86,20 @@ npm install sveltlana
 <Accordion>
   <!-- Your accordion content -->
 </Accordion>
+```
+
+### Scrolling marquee
+
+```svelte
+<script>
+  import Marquee from 'sveltlana/Marquee';
+</script>
+
+<Marquee duration={24} gap="2rem" aria-label="Featured brands">
+  <span>Brand one</span>
+  <span>Brand two</span>
+  <span>Brand three</span>
+</Marquee>
 ```
 
 ## 🛠️ CLI Commands
