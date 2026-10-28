@@ -15,6 +15,24 @@
 		| 'color'
 		| 'range'
 		| 'hidden';
+	type Props = {
+		value?: string;
+		type?: InputType;
+		error?: string | null;
+		label?: string;
+		required?: boolean;
+		oninput?: (event: Event) => void;
+		onblur?: (event: FocusEvent) => void;
+		disabled?: boolean;
+		placeholder?: string;
+		styles?: {
+			wrapper?: string;
+			label?: string;
+			input?: string;
+			error?: string;
+			asterisk?: string;
+		};
+	};
 
 	let uid = 'input-' + Math.random().toString(36).slice(2, 9);
 
@@ -29,7 +47,7 @@
 		disabled = false,
 		placeholder = '',
 		styles = { wrapper: '', label: '', input: '', error: '', asterisk: '' }
-	} = $props();
+	}: Props = $props();
 
 	function handleInput(event: Event) {
 		oninput?.(event);
@@ -42,7 +60,9 @@
 
 <div class={styles.wrapper}>
 	{#if label}
-		<label for={uid} class={styles.label}>{label}{#if required}<span class={styles.asterisk}> *</span>{/if}</label>
+		<label for={uid} class={styles.label}
+			>{label}{#if required}<span class={styles.asterisk}> *</span>{/if}</label
+		>
 	{/if}
 
 	<input

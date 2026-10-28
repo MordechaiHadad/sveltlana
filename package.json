@@ -38,9 +38,6 @@
     "./Accordion": {
       "svelte": "./dist/sveltlana/components/Accordion/index.svelte"
     },
-    "./Carousel": {
-      "svelte": "./dist/sveltlana/components/Carousel/index.svelte"
-    },
     "./Marquee": {
       "svelte": "./dist/sveltlana/components/Marquee.svelte"
     },

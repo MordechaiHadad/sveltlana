@@ -13,18 +13,18 @@ Sveltlana provides a collection of headless Svelte components built primarily wi
 npx sveltlana list
 
 # Add a single component
-npx sveltlana add Modal
+npx sveltlana add Dropdown
 
 # Add multiple components
-npx sveltlana add Accordion Carousel Dropdown
+npx sveltlana add Accordion Dropdown
 
 # Remove a component
-npx sveltlana remove Modal
+npx sveltlana remove Dropdown
 # or use the alias
-npx sveltlana rm Modal
+npx sveltlana rm Dropdown
 
-# Remove multiple components  
-npx sveltlana rm Accordion Carousel
+# Remove multiple components
+npx sveltlana rm Accordion Dropdown
 ```
 
 > **Note**: Some components require `tailwind-merge` for styling utilities. Install it if needed:
@@ -41,14 +41,14 @@ npm install sveltlana
 ## 📦 Available Components
 
 - **📦 Accordion** - Collapsible content panels
-- **📦 Carousel** - Image/content carousel with touch support
 - **🧩 Marquee** - Continuously scrolling, looping content banners
 - **📦 Dropdown** - Flexible dropdown menus
-- **🧩 Modal** - Accessible modal dialogs
-- **🧩 ImageModal** - Zoomable image viewer with gestures
+- **📦 AlertDialog** - Confirmation dialogs
+- **📦 Combobox** - Searchable selection controls
 - **📦 Popover** - Floating content containers
 - **📦 Swipable** - Touch-friendly swipe interactions
 - **📦 Navbar** - Sticky navigation bar
+- **🧩 TextInput** - Styled form input
 - **⚡ Actions** - Utility actions (clickOutside, intersectionObserver, resizeObserver)
 
 ## 🎯 Usage Examples
@@ -57,19 +57,19 @@ npm install sveltlana
 
 ```bash
 # Add a single component
-npx sveltlana add Dropdown 
+npx sveltlana add Dropdown
 
 # Use in your Svelte component
 <script>
-  import Modal from '$lib/sveltlana/Modal.svelte';
-  
-  let isOpen = false;
+  import Dropdown from '$lib/sveltlana/components/Dropdown/index.js';
 </script>
 
-<Modal {isOpen}>
-  <h2>Hello World!</h2>
-  <p>This is a modal dialog.</p>
-</Modal>
+<Dropdown>
+  <Dropdown.Trigger>Open menu</Dropdown.Trigger>
+  <Dropdown.Content>
+    <Dropdown.Item>First option</Dropdown.Item>
+  </Dropdown.Content>
+</Dropdown>
 ```
 
 ### Using as npm package
@@ -109,25 +109,25 @@ npm install sveltlana
 npx sveltlana list
 
 # Add a single component
-npx sveltlana add Modal
+npx sveltlana add Dropdown
 
-# Add multiple components  
-npx sveltlana add Accordion Carousel Dropdown
+# Add multiple components
+npx sveltlana add Accordion Dropdown
 
 # Remove a single component
-npx sveltlana remove Modal
+npx sveltlana remove Dropdown
 # or use the alias
-npx sveltlana rm Modal
+npx sveltlana rm Dropdown
 
 # Remove multiple components
-npx sveltlana rm Accordion Carousel
+npx sveltlana rm Accordion Dropdown
 
 # Add component with dependencies
-npx sveltlana add Modal --deps
+npx sveltlana add Dropdown --deps
 
 # Custom output directory
-npx sveltlana add Modal --output ./src/components
-npx sveltlana rm Modal --output ./src/components
+npx sveltlana add Dropdown --output ./src/components
+npx sveltlana rm Dropdown --output ./src/components
 ```
 
 ## ✨ Features

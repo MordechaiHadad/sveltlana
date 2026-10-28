@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import type { Snippet } from 'svelte';
 
 	type Props = {
@@ -20,24 +21,49 @@
 		'aria-label': ariaLabel = 'Scrolling banner',
 		class: className
 	}: Props = $props();
+
+	let viewportElement: HTMLDivElement;
+	let groupElement: HTMLDivElement;
+	let groupCount = $state(2);
+	let groupWidth = $state(0);
+
+	onMount(() => {
+		const update = () => {
+			groupWidth = groupElement.getBoundingClientRect().width;
+			if (!groupWidth) {
+				groupCount = 2;
+				return;
+			}
+			groupCount = Math.max(2, Math.ceil(viewportElement.clientWidth / groupWidth) + 1);
+		};
+		const observer = new ResizeObserver(update);
+
+		observer.observe(viewportElement);
+		observer.observe(groupElement);
+		update();
+
+		return () => observer.disconnect();
+	});
 </script>
 
-<!-- shortcut: short content can leave a blank gap, measure and repeat items when callers need automatic viewport fill -->
 <div
+	bind:this={viewportElement}
 	class={className}
 	role="region"
 	aria-label={ariaLabel}
 	aria-roledescription="marquee"
 	data-pause-on-hover={pauseOnHover}
-	style={`--marquee-duration: ${Number.isFinite(duration) && duration > 0 ? duration : 24}s; --marquee-gap: ${gap}; --marquee-direction: ${direction === 'right' ? 'reverse' : 'normal'}`}
+	style={`--marquee-duration: ${Number.isFinite(duration) && duration > 0 ? duration : 24}s; --marquee-gap: ${gap}; --marquee-distance: ${groupWidth}px; --marquee-direction: ${direction === 'right' ? 'reverse' : 'normal'}`}
 >
 	<div class="track">
-		<div class="group">
+		<div class="group" bind:this={groupElement}>
 			{@render children()}
 		</div>
-		<div class="group" aria-hidden="true">
-			{@render children()}
-		</div>
+		{#each Array.from({ length: groupCount - 1 }) as copy}
+			<div class="group" aria-hidden="true">
+				{@render children()}
+			</div>
+		{/each}
 	</div>
 </div>
 
@@ -68,7 +94,7 @@
 
 	@keyframes marquee {
 		to {
-			transform: translateX(-50%);
+			transform: translateX(calc(-1 * var(--marquee-distance)));
 		}
 	}
 
