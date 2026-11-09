@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { setContext, type Snippet } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 
 	let {
 		isOpen = $bindable(false),

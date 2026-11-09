@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 
 	type Props = {
 		children: Snippet;

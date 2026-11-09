@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 	import { slide } from 'svelte/transition';
 	import { twMerge } from 'tailwind-merge';
 
@@ -16,19 +16,13 @@
 {#if context.isExpanded}
 	<div
 		id="dropdown-content"
-		class={twMerge('z-50 flex flex-col', className)}
+		class={twMerge(
+			'fixed z-50 flex flex-col [position-area:block-end] [position-try-fallbacks:flip-block,flip-inline] [margin-block-start:4px]',
+			className
+		)}
 		transition:transition
 		style:position-anchor="--dropdown-{context.uid}"
 	>
 		{@render children()}
 	</div>
 {/if}
-
-<style>
-	:global(#dropdown-content) {
-		position: fixed;
-		position-area: bottom;
-		position-try-fallbacks: flip-block, flip-inline;
-		margin-top: 4px;
-	}
-</style>

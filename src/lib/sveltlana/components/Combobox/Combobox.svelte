@@ -26,18 +26,13 @@
 	let context: Context = $state({
 		uid,
 		isExpanded: false,
-		closeOnOutsideClick: true,
+		closeOnOutsideClick: () => closeOnOutsideClick,
 		currentIndex: -1,
-		onExpand: () => {},
-		onCollapse: () => {}
+		onExpand: (isExpanded) => onexpand(isExpanded),
+		onCollapse: (isExpanded) => oncollapse(isExpanded)
 	});
 
 	setContext('combobox', context);
-	$effect(() => {
-		context.closeOnOutsideClick = closeOnOutsideClick;
-		context.onExpand = onexpand;
-		context.onCollapse = oncollapse;
-	});
 
 	const handleKeys = (event: KeyboardEvent) => {
 		if (event.key === 'Escape') {

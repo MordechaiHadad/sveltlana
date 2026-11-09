@@ -29,8 +29,11 @@
 {#if context.isExpanded}
 	<div
 		id="{context.uid}-content"
-		class={twMerge('combobox-content z-50 flex flex-col', className)}
-		popover={context.closeOnOutsideClick ? 'auto' : 'manual'}
+		class={twMerge(
+			'combobox-content fixed z-50 flex flex-col [position-area:block-end] [position-try-fallbacks:flip-block,flip-inline] min-w-max supports-[min-width:anchor-size(width)]:min-w-[anchor-size(width)] [margin-block-start:4px] mx-0 p-0 border-0 text-inherit bg-transparent',
+			className
+		)}
+		popover={context.closeOnOutsideClick() ? 'auto' : 'manual'}
 		style:position-anchor="--combobox-{context.uid}"
 		use:showPopover
 		ontoggle={handleToggle}
@@ -39,24 +42,3 @@
 		{@render children()}
 	</div>
 {/if}
-
-<style>
-	:global(.combobox-content) {
-		position: fixed;
-		position-area: bottom;
-		position-try-fallbacks: flip-block, flip-inline;
-		min-width: max-content;
-		margin-block-start: 4px;
-		margin-inline: 0;
-		padding: 0;
-		border: 0;
-		color: inherit;
-		background: transparent;
-	}
-
-	@supports (min-width: anchor-size(width)) {
-		:global(.combobox-content) {
-			min-width: anchor-size(width);
-		}
-	}
-</style>

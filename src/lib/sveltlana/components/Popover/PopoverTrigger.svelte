@@ -8,8 +8,12 @@
 	let trigger: HTMLButtonElement;
 
 	const toggle = () => {
-		context.source = trigger;
-		context.isExpanded = !context.isExpanded;
+		const isOpen = context.content?.isConnected
+			? context.content.matches(':popover-open')
+			: context.isExpanded;
+
+		if (isOpen) context.close();
+		else context.open(trigger);
 	};
 </script>
 

@@ -22,33 +22,19 @@
 	let context: Context = $state({
 		swipingDirection: 'none',
 		swipeDistance: 0,
-		maxSwipe: 0,
 		containerWidth: 0,
-		thresholdMet: false, // Add a flag to track if threshold was met
+		thresholdMet: () => Math.abs(context.swipeDistance) >= context.containerWidth * threshold,
 		resetSwipe: () => {
 			context.swipeDistance = 0;
 			context.swipingDirection = 'none';
-			context.thresholdMet = false;
 		}
 	});
 
 	let container: HTMLElement;
 
-	$effect(() => {
-		if (container) {
-			context.containerWidth = container.clientWidth;
-			context.maxSwipe = container.clientWidth * 0.8; // 80% of container width
-		}
-	});
-
 	let isThresholdReached = $derived(
 		Math.abs(context.swipeDistance) >= context.containerWidth * threshold
 	);
-
-	// Update thresholdMet flag when threshold status changes
-	$effect(() => {
-		context.thresholdMet = isThresholdReached;
-	});
 
 	const handlePointerDown = (event: PointerEvent) => {
 		if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
@@ -82,7 +68,8 @@
 		}
 
 		context.swipingDirection = diff > 0 ? 'right' : diff < 0 ? 'left' : 'none';
-		context.swipeDistance = Math.max(-context.maxSwipe, Math.min(context.maxSwipe, diff));
+		const maxSwipe = context.containerWidth * 0.8;
+		context.swipeDistance = Math.max(-maxSwipe, Math.min(maxSwipe, diff));
 	};
 
 	onMount(() => {
@@ -112,6 +99,7 @@
 		isThresholdReached ? thresholdReachedClass : ''
 	)}
 	bind:this={container}
+	bind:clientWidth={context.containerWidth}
 	role="presentation"
 	style:touch-action="pan-y"
 	onpointerdown={handlePointerDown}

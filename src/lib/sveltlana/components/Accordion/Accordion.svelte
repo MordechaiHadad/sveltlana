@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { setContext, type Snippet } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
 
 	type ChildrenSnippet = Snippet<[{ isExpanded: boolean }]>;
 
-	let { class: className = '', children }: {
+	let {
+		class: className = '',
+		children
+	}: {
 		class?: string;
 		children: ChildrenSnippet;
 	} = $props();

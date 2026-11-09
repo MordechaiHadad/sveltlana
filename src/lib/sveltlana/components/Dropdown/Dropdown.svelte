@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { setContext, type Snippet } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
-	import { toggle } from './functions';
-	import { onClickOutside } from '../../actions/onClickOutside';
+	import { toggle } from './functions.js';
+	import { onClickOutside } from '../../actions/onClickOutside.js';
 
 	type Props = {
 		closeOnOutsideClick?: boolean;
@@ -23,14 +23,14 @@
 		oncollapse = () => {}
 	}: Props = $props();
 
-	const uid = crypto.randomUUID();
+	const uid = $props.id();
 
 	let context: Context = $state({
 		uid,
 		isExpanded: false,
 		currentIndex: -1,
-		onExpand: onexpand,
-		onCollapse: oncollapse
+		onExpand: (isExpanded) => onexpand(isExpanded),
+		onCollapse: (isExpanded) => oncollapse(isExpanded)
 	});
 
 	setContext('dropdown', context);
@@ -54,7 +54,7 @@
 		event.preventDefault();
 		let itemsIndex = context.currentIndex;
 
-		let target = self.querySelector('#dropdown-content') as HTMLElement;
+		let target = self?.querySelector('#dropdown-content') as HTMLElement | undefined;
 
 		if (!target) return;
 
@@ -88,7 +88,7 @@
 	const getActiveItemIndex = () => {
 		const activeItem = self?.querySelector('[data-active]');
 		const target = self?.querySelector('#dropdown-content') as HTMLElement;
-		const items = Array.from(target.children);
+		const items = Array.from(target?.children ?? []);
 		const index = activeItem ? items.indexOf(activeItem) : -1;
 		return index;
 	};

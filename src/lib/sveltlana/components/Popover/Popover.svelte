@@ -5,27 +5,47 @@
 
 	let {
 		closeOnOutsideClick = true,
+		open = $bindable(false),
 		class: className = '',
 		children
 	}: {
 		closeOnOutsideClick?: boolean;
+		open?: boolean;
 		class?: string;
 		children: Snippet;
 	} = $props();
 
 	const uid = $props.id();
 
-	let context: Context = $state({
+	const context: Context = {
 		uid,
-		isExpanded: false,
-		closeOnOutsideClick: true
-	});
+		get isExpanded() {
+			return open;
+		},
+		set isExpanded(value: boolean) {
+			open = value;
+		},
+		get closeOnOutsideClick() {
+			return closeOnOutsideClick;
+		},
+		open: (source?: HTMLElement) => {
+			if (source) context.source = source;
+
+			const content = context.content;
+			const shouldReopen = content?.isConnected && !content.matches(':popover-open');
+			context.isExpanded = true;
+
+			if (shouldReopen) {
+				const popover = content as HTMLElement & {
+					showPopover(options?: { source: HTMLElement }): void;
+				};
+				popover.showPopover(context.source ? { source: context.source } : undefined);
+			}
+		},
+		close: () => (context.isExpanded = false)
+	};
 
 	setContext('popover', context);
-
-	$effect(() => {
-		context.closeOnOutsideClick = closeOnOutsideClick;
-	});
 </script>
 
 <div class={twMerge('relative inline-block', className)} tabindex="-1">
