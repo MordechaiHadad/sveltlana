@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { getDynamicPosition } from '../../functions';
-	import type { Alignment } from '../../types';
 	import { getContext, type Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 	import { slide } from 'svelte/transition';
 
 	let {
@@ -16,44 +14,44 @@
 		children: Snippet;
 	} = $props();
 
-	let position: Alignment = 'bottom';
 	let context: Context = getContext('popover');
 
-	const setDynamicPositioning = (node: HTMLElement) => {
-		position = getDynamicPosition(node, 'vertical');
+	const showPopover = (node: HTMLElement) => {
+		const popover = node as HTMLElement & {
+			showPopover(options?: { source: HTMLElement }): void;
+		};
+		popover.showPopover(context.source ? { source: context.source } : undefined);
+	};
 
-		node.classList.remove('top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right');
-		node.classList.add(position);
+	const handleToggle = (event: ToggleEvent) => {
+		if (event.newState === 'closed' && context.isExpanded) context.isExpanded = false;
 	};
 </script>
 
 {#if context.isExpanded}
-	<div class={twMerge('absolute z-50', className)} use:setDynamicPositioning transition:transition>
+	<div
+		id="{context.uid}-content"
+		class={twMerge('popover-content z-50', className)}
+		popover={context.closeOnOutsideClick ? 'auto' : 'manual'}
+		style:position-anchor="--popover-{context.uid}"
+		use:showPopover
+		ontoggle={handleToggle}
+		transition:transition
+	>
 		{@render children()}
 	</div>
 {/if}
 
 <style>
-	.top {
-		bottom: 100%;
-	}
-	.bottom {
-		top: 100%;
-	}
-	.top-left {
-		bottom: 100%;
-		right: 0;
-	}
-	.top-right {
-		bottom: 100%;
-		left: 0;
-	}
-	.bottom-left {
-		top: 100%;
-		right: 0;
-	}
-	.bottom-right {
-		top: 100%;
-		left: 0;
+	:global(.popover-content) {
+		position: fixed;
+		position-area: bottom;
+		position-try-fallbacks: flip-block, flip-inline;
+		margin-block-start: 4px;
+		margin-inline: 0;
+		padding: 0;
+		border: 0;
+		color: inherit;
+		background: transparent;
 	}
 </style>

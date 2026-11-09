@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { Context } from './context';
-	import { onClickOutside } from '../../actions/onClickOutside';
+	import type { Context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
 	import { setContext, type Snippet } from 'svelte';
 
@@ -14,27 +13,21 @@
 		children: Snippet;
 	} = $props();
 
+	const uid = $props.id();
+
 	let context: Context = $state({
-		isExpanded: false
+		uid,
+		isExpanded: false,
+		closeOnOutsideClick: true
 	});
 
 	setContext('popover', context);
 
-	const close = () => {
-		context.isExpanded = false;
-	};
+	$effect(() => {
+		context.closeOnOutsideClick = closeOnOutsideClick;
+	});
 </script>
 
-<div
-	class={twMerge('relative inline-block', className)}
-	tabindex="-1"
-	use:onClickOutside={{
-		callback: () => {
-			if (closeOnOutsideClick && context.isExpanded) {
-				close();
-			}
-		}
-	}}
->
+<div class={twMerge('relative inline-block', className)} tabindex="-1">
 	{@render children()}
 </div>

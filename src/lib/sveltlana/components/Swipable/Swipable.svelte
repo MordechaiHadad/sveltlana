@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 
 	type Props = {
 		class?: string;
@@ -12,12 +12,12 @@
 
 	let { class: className = '', threshold = 0.2, children, thresholdReachedClass }: Props = $props();
 
-	let { startX, isDragging, hasMovedSignificantly, preventNextClick } = $state({
+	let { startX, isDragging, preventNextClick } = $state({
 		startX: 0,
 		isDragging: false,
-		hasMovedSignificantly: false, // Track if movement exceeds a minimum distance
 		preventNextClick: false // Flag to prevent the next click event
 	});
+	let pointerId = -1;
 
 	let context: Context = $state({
 		swipingDirection: 'none',
@@ -50,25 +50,20 @@
 		context.thresholdMet = isThresholdReached;
 	});
 
-	const handleTouchStart = (event: TouchEvent) => {
-		const touch = event.touches[0];
-		startX = touch.clientX;
+	const handlePointerDown = (event: PointerEvent) => {
+		if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+		pointerId = event.pointerId;
+		startX = event.clientX;
 		isDragging = true;
+		preventNextClick = false;
+		container.setPointerCapture(event.pointerId);
 	};
 
-	const handleTouchMove = (event: TouchEvent) => {
-		if (!isDragging) return;
-		const touch = event.touches[0];
-		const currentX = touch.clientX;
-		const diff = currentX - startX;
-
-		context.swipingDirection = diff > 0 ? 'right' : diff < 0 ? 'left' : 'none';
-		context.swipeDistance = Math.max(-context.maxSwipe, Math.min(context.maxSwipe, diff));
-	};
-
-	const handleTouchEnd = () => {
-		if (!isDragging) return;
+	const handlePointerEnd = (event: PointerEvent) => {
+		if (!isDragging || event.pointerId !== pointerId) return;
+		pointerId = -1;
 		isDragging = false;
+		if (event.type === 'pointercancel') preventNextClick = false;
 
 		// Mark that swiping has ended but keep the distance
 		context.swipingDirection = 'none';
@@ -79,19 +74,10 @@
 		}, 100);
 	};
 
-	const handleMouseDown = (event: MouseEvent) => {
-		startX = event.clientX;
-		isDragging = true;
-		hasMovedSignificantly = false;
-	};
-
-	const handleMouseMove = (event: MouseEvent) => {
-		if (!isDragging) return;
-		const currentX = event.clientX;
-		const diff = currentX - startX;
-
-		if (Math.abs(diff) > 10) {
-			hasMovedSignificantly = true;
+	const handlePointerMove = (event: PointerEvent) => {
+		if (!isDragging || event.pointerId !== pointerId) return;
+		const diff = event.clientX - startX;
+		if (event.pointerType !== 'touch' && Math.abs(diff) > 10) {
 			preventNextClick = true;
 		}
 
@@ -99,19 +85,11 @@
 		context.swipeDistance = Math.max(-context.maxSwipe, Math.min(context.maxSwipe, diff));
 	};
 
-	const handleMouseUp = () => handleTouchEnd();
-
-	const handleMouseLeave = () => {
-		if (isDragging) {
-			handleMouseUp();
-		}
-	};
-
 	onMount(() => {
-		const captureClickListener = (e: MouseEvent) => {
+		const captureClickListener = (event: MouseEvent) => {
 			if (preventNextClick) {
-				e.stopImmediatePropagation();
-				e.preventDefault();
+				event.stopImmediatePropagation();
+				event.preventDefault();
 				preventNextClick = false;
 			}
 		};
@@ -135,12 +113,11 @@
 	)}
 	bind:this={container}
 	role="presentation"
-	ontouchstart={handleTouchStart}
-	ontouchmove={handleTouchMove}
-	ontouchend={handleTouchEnd}
-	onmousedown={handleMouseDown}
-	onmousemove={handleMouseMove}
-	onmouseup={handleMouseUp}
-	onmouseleave={handleMouseLeave}>
+	style:touch-action="pan-y"
+	onpointerdown={handlePointerDown}
+	onpointermove={handlePointerMove}
+	onpointerup={handlePointerEnd}
+	onpointercancel={handlePointerEnd}
+>
 	{@render children()}
 </div>

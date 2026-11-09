@@ -1,3 +1,6 @@
 export type Context = {
-    isExpanded: boolean;
+	uid: string;
+	source?: HTMLElement;
+	isExpanded: boolean;
+	closeOnOutsideClick: boolean;
 };

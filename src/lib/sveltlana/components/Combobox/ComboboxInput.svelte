@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 
 	let {
 		class: className = '',
@@ -17,13 +17,16 @@
 	} = $props();
 
 	const context: Context = getContext('combobox');
+	let input: HTMLInputElement;
 
 	const toggle = () => {
+		context.source = input;
 		context.isExpanded = !context.isExpanded;
 		context.onExpand(context.isExpanded);
 	};
 
 	const openIfClosed = () => {
+		context.source = input;
 		if (!context.isExpanded) {
 			context.isExpanded = true;
 			context.onExpand(true);
@@ -46,9 +49,13 @@
 
 <input
 	class={className}
+	aria-controls="{context.uid}-content"
+	aria-expanded={context.isExpanded}
 	bind:value
 	{placeholder}
-	onclick={toggle}
+	style:anchor-name="--combobox-{context.uid}"
+	bind:this={input}
+	onclick={openIfClosed}
 	onfocus={openIfClosed}
 	oninput={(e) => handleInput(e)}
 	onkeydown={handleKeydown}

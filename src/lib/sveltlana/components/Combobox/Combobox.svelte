@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { setContext, type Snippet } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 	import { twMerge } from 'tailwind-merge';
-	import { toggle } from './functions';
-	import { onClickOutside } from '../../actions/onClickOutside';
+	import { toggle } from './functions.js';
 
 	type Props = {
 		closeOnOutsideClick?: boolean;
@@ -23,14 +22,22 @@
 		oncollapse = () => {}
 	}: Props = $props();
 
+	const uid = $props.id();
 	let context: Context = $state({
+		uid,
 		isExpanded: false,
+		closeOnOutsideClick: true,
 		currentIndex: -1,
-		onExpand: onexpand,
-		onCollapse: oncollapse
+		onExpand: () => {},
+		onCollapse: () => {}
 	});
 
 	setContext('combobox', context);
+	$effect(() => {
+		context.closeOnOutsideClick = closeOnOutsideClick;
+		context.onExpand = onexpand;
+		context.onCollapse = oncollapse;
+	});
 
 	const handleKeys = (event: KeyboardEvent) => {
 		if (event.key === 'Escape') {
@@ -50,7 +57,7 @@
 		event.preventDefault();
 		let itemsIndex = context.currentIndex;
 
-		let target = self.querySelector('#combobox-content') as HTMLElement;
+		let target = self?.querySelector('.combobox-content') as HTMLElement;
 
 		if (!target) return;
 
@@ -83,7 +90,7 @@
 
 	const getActiveItemIndex = () => {
 		const activeItem = self?.querySelector('[data-active]');
-		const target = self?.querySelector('#combobox-content') as HTMLElement;
+		const target = self?.querySelector('.combobox-content') as HTMLElement;
 		const items = Array.from(target.children);
 		const index = activeItem ? items.indexOf(activeItem) : -1;
 		return index;
@@ -106,19 +113,11 @@
 <div
 	class={twMerge('relative inline-block', className)}
 	role="combobox"
-	aria-controls="combobox-content"
+	aria-controls="{context.uid}-content"
 	aria-expanded={context.isExpanded}
 	bind:this={self}
 	tabindex="-1"
 	onkeydown={handleKeys}
-	use:onClickOutside={{
-		callback: () => {
-			if (closeOnOutsideClick && context.isExpanded) {
-				toggle(context);
-				oncollapse(context.isExpanded);
-			}
-		}
-	}}
 >
 	{@render children()}
 </div>

@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { getContext, type Snippet } from 'svelte';
-	import type { Context } from './context';
+	import type { Context } from './context.js';
 	import { slide } from 'svelte/transition';
 	import { twMerge } from 'tailwind-merge';
-	import type { Alignment } from '../../types';
-	import { getDynamicPosition } from '../../functions';
 
 	let {
 		class: className = '',
@@ -13,48 +11,52 @@
 	}: { class?: string; children: Snippet; transition?: typeof slide } = $props();
 
 	let context: Context = getContext('combobox');
-	let position: Alignment = 'bottom';
+	const showPopover = (node: HTMLElement) => {
+		const popover = node as HTMLElement & {
+			showPopover(options?: { source: HTMLElement }): void;
+		};
+		popover.showPopover(context.source ? { source: context.source } : undefined);
+	};
 
-	const setDynamicPositioning = (node: HTMLElement) => {
-		position = getDynamicPosition(node, 'vertical');
-
-		node.classList.remove('top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right');
-		node.classList.add(position);
+	const handleToggle = (event: ToggleEvent) => {
+		if (event.newState === 'closed' && context.isExpanded) {
+			context.isExpanded = false;
+			context.onCollapse(false);
+		}
 	};
 </script>
 
 {#if context.isExpanded}
 	<div
-		id="combobox-content"
-		class={twMerge('z-50 absolute flex min-w-full flex-col', className)}
+		id="{context.uid}-content"
+		class={twMerge('combobox-content z-50 flex flex-col', className)}
+		popover={context.closeOnOutsideClick ? 'auto' : 'manual'}
+		style:position-anchor="--combobox-{context.uid}"
+		use:showPopover
+		ontoggle={handleToggle}
 		transition:transition
-		use:setDynamicPositioning
 	>
 		{@render children()}
 	</div>
 {/if}
 
 <style>
-	.top {
-		bottom: 100%;
+	:global(.combobox-content) {
+		position: fixed;
+		position-area: bottom;
+		position-try-fallbacks: flip-block, flip-inline;
+		min-width: max-content;
+		margin-block-start: 4px;
+		margin-inline: 0;
+		padding: 0;
+		border: 0;
+		color: inherit;
+		background: transparent;
 	}
-	.bottom {
-		top: 100%;
-	}
-	.top-left {
-		bottom: 100%;
-		right: 0;
-	}
-	.top-right {
-		bottom: 100%;
-		left: 0;
-	}
-	.bottom-left {
-		top: 100%;
-		right: 0;
-	}
-	.bottom-right {
-		top: 100%;
-		left: 0;
+
+	@supports (min-width: anchor-size(width)) {
+		:global(.combobox-content) {
+			min-width: anchor-size(width);
+		}
 	}
 </style>
